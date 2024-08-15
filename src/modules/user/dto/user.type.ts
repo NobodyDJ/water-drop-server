@@ -8,6 +8,6 @@ export class UserType{
     name?: string;
     @Field()
     desc?: string;
-    @Field()
+    @Field({ description: '账户信息'})
     account?: string;
 }
