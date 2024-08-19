@@ -4,6 +4,9 @@ import { User } from './modules/user/models/user.entity';
 
 @Controller()
 export class AppController {
+  getHello(): any {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly userService: UserService) {}
 
   @Get('/create')

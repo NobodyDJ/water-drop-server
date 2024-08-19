@@ -23,7 +23,7 @@ import { ApolloDriver } from '@nestjs/apollo';
     // 注册graphql
     GraphQLModule.forRoot({
       driver: ApolloDriver,
-      autoSchemaFile: true,
+      autoSchemaFile: './schema.gql', // 值为true会将schema放到内存
     }),
     UserModule,
   ],
