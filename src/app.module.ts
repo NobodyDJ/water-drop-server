@@ -18,14 +18,14 @@ import { ApolloDriver } from '@nestjs/apollo';
       entities: [`${__dirname}/../modules/**/*.entity{.ts,.js}`],
       logging: true,
       synchronize: true,
-      autoLoadEntities: true
+      autoLoadEntities: true,
     }),
     // 注册graphql
     GraphQLModule.forRoot({
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),
-    UserModule
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
