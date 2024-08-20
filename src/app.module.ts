@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver } from '@nestjs/apollo';
+import { OSSModule } from './modules/oss/oss.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ApolloDriver } from '@nestjs/apollo';
       autoSchemaFile: './schema.gql', // 值为true会将schema放到内存
     }),
     UserModule,
+    OSSModule,
   ],
   controllers: [AppController],
   providers: [AppService],
