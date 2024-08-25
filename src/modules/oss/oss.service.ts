@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import dayjs from 'dayjs';
 import OSS from 'ali-oss';
 import { OSSType } from './dto/oss.type';
+import { ACCESS_KEY_ID, ACCESS_KEY_SECRET } from 'src/common/constants/aliyun';
 
 @Injectable()
 export class OSSService {
@@ -9,8 +10,8 @@ export class OSSService {
     const config = {
       // 从环境变量中获取RAM用户的访问密钥和目标RAM角色的Arn.
       // region填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
-      accessKeyId: '',
-      accessKeySecret: '',
+      accessKeyId: ACCESS_KEY_ID,
+      accessKeySecret: ACCESS_KEY_SECRET,
       region: 'oss-cn-shanghai',
       // 指定Bucket名称。
       bucket: 'water-drop-assets-dj',

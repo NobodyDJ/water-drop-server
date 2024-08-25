@@ -45,6 +45,9 @@ type Mutation {
 
   """删除一个用户"""
   del(id: String!): Boolean!
+
+  """删除一个用户"""
+  sendCodeMsg(tel: String!): String!
 }
 
 input UserInput {
