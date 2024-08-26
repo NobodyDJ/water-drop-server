@@ -10,4 +10,8 @@ export class UserType {
   desc?: string;
   @Field({ description: '账户信息' })
   account?: string;
+  @Field({ description: '手机号' })
+  tel?: string;
+  @Field()
+  code?: string;
 }

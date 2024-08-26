@@ -9,6 +9,10 @@ type UserType {
 
   """账户信息"""
   account: String!
+
+  """手机号"""
+  tel: String!
+  code: String!
 }
 
 type OSSType {
@@ -46,8 +50,11 @@ type Mutation {
   """删除一个用户"""
   del(id: String!): Boolean!
 
-  """删除一个用户"""
-  sendCodeMsg(tel: String!): String!
+  """发送验证码"""
+  sendCodeMsg(tel: String!): Boolean!
+
+  """登录"""
+  login(tel: String!, code: String!): Boolean!
 }
 
 input UserInput {

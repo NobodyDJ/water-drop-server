@@ -1,28 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import Dysmsapi20170525, * as $Dysmsapi20170525 from '@alicloud/dysmsapi20170525';
-import * as $OpenApi from '@alicloud/openapi-client';
 import * as $Util from '@alicloud/tea-util';
+import * as $Dysmsapi20170525 from '@alicloud/dysmsapi20170525';
 import { getRandomCode } from 'src/shared/utills';
-import {
-  ACCESS_KEY_ID,
-  ACCESS_KEY_SECRET,
-  SIGN_NAME,
-  TEMPLATE_CODE,
-} from 'src/common/constants/aliyun';
+import { UserService } from '../user/user.service';
+import { SIGN_NAME, TEMPLATE_CODE } from 'src/common/constants/aliyun';
+// 形成了单例client
+import { client } from 'src/shared/utills/msg';
+import dayjs from 'dayjs';
 @Injectable()
 export class AuthService {
+  constructor(private readonly userService: UserService) {}
+
   // 发送短信验证码
-  async sendCodeMsg(tel: string): Promise<string> {
+  async sendCodeMsg(tel: string): Promise<boolean> {
+    // 对验证码的时间是否过期进行校验
+    const user = await this.userService.findByTel(tel);
+    if (user) {
+      const diffTime = dayjs().diff(dayjs(user.codeCreateTimeAt));
+      if (diffTime < 60 * 1000) {
+        return false;
+      }
+    }
     const code = getRandomCode();
-    const config = new $OpenApi.Config({
-      // 必填，请确保代码运行环境设置了环境变量 ALIBABA_CLOUD_ACCESS_KEY_ID。
-      accessKeyId: ACCESS_KEY_ID,
-      // 必填，请确保代码运行环境设置了环境变量 ALIBABA_CLOUD_ACCESS_KEY_SECRET。
-      accessKeySecret: ACCESS_KEY_SECRET,
-    });
-    // Endpoint 请参考 https://api.aliyun.com/product/Dysmsapi
-    config.endpoint = `dysmsapi.aliyuncs.com`;
-    const client = new Dysmsapi20170525(config);
+    // client变量只需要创建一次即可
+    console.log('tel', tel);
     const sendSmsRequest = new $Dysmsapi20170525.SendSmsRequest({
       signName: SIGN_NAME,
       templateCode: TEMPLATE_CODE,
@@ -32,8 +33,23 @@ export class AuthService {
     const runtime = new $Util.RuntimeOptions({});
     try {
       // 复制代码运行请自行打印 API 的返回值
-      const res = await client.sendSmsWithOptions(sendSmsRequest, runtime);
-      console.log('res', res);
+      await client.sendSmsWithOptions(sendSmsRequest, runtime);
+      const user = await this.userService.findByTel(tel);
+      console.log('user found', user);
+      if (user) {
+        const result = await this.userService.updateCode(user.id, code);
+        console.log('result', result);
+        if (result) {
+          return true;
+        }
+        return false;
+      }
+      console.log('new Date()', new Date());
+      await this.userService.create({
+        tel,
+        code,
+        codeCreateTimeAt: new Date(),
+      });
     } catch (error) {
       // 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
       // 错误 message
@@ -41,6 +57,5 @@ export class AuthService {
       // 诊断地址
       console.log(error.data['Recommend']);
     }
-    return code;
   }
 }

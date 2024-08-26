@@ -11,6 +11,7 @@ export class UserService {
 
   // 新增一个用户
   async create(entity: DeepPartial<User>): Promise<boolean> {
+    console.log('entity', entity);
     const res = await this.UserRepository.insert(entity);
     // 确保数据正确插入
     if (res && res.raw.affectedRows > 0) {
@@ -45,5 +46,24 @@ export class UserService {
       },
     });
     return res;
+  }
+
+  // 通过手机号查询一个用户
+  async findByTel(tel: string): Promise<User> {
+    const res = await this.UserRepository.findOne({
+      where: {
+        tel,
+      },
+    });
+    return res;
+  }
+
+  // 更新一个用户的验证码
+  async updateCode(id: string, code: string): Promise<boolean> {
+    const res = await this.UserRepository.update(id, { code });
+    if (res.affected > 0) {
+      return true;
+    }
+    return false;
   }
 }
