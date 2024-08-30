@@ -1,29 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import * as $Util from '@alicloud/tea-util';
 import * as $Dysmsapi20170525 from '@alicloud/dysmsapi20170525';
-import { getRandomCode } from 'src/shared/utills';
+import { getRandomCode } from '@/shared/utills';
 import { UserService } from '../user/user.service';
-import { SIGN_NAME, TEMPLATE_CODE } from 'src/common/constants/aliyun';
+import { SIGN_NAME, TEMPLATE_CODE } from '@/common/constants/aliyun';
 // 形成了单例client
-import { client } from 'src/shared/utills/msg';
+import { client } from '@/shared/utills/msg';
 import dayjs from 'dayjs';
+import {
+  SUCCESS,
+  CODE_NOT_EXPIRE,
+  UPDATE_ERROR,
+} from '@/common/constants/code';
+import { Result } from '@/dto/result.type';
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService) {}
 
   // 发送短信验证码
-  async sendCodeMsg(tel: string): Promise<boolean> {
+  async sendCodeMsg(tel: string): Promise<Result> {
     // 对验证码的时间是否过期进行校验
     const user = await this.userService.findByTel(tel);
     if (user) {
       const diffTime = dayjs().diff(dayjs(user.codeCreateTimeAt));
-      if (diffTime < 60 * 1000) {
-        return false;
+      if (diffTime < 60 * 60 * 1000) {
+        return {
+          code: CODE_NOT_EXPIRE,
+          message: 'code 尚未过期',
+        };
       }
     }
     const code = getRandomCode();
     // client变量只需要创建一次即可
-    console.log('tel', tel);
     const sendSmsRequest = new $Dysmsapi20170525.SendSmsRequest({
       signName: SIGN_NAME,
       templateCode: TEMPLATE_CODE,
@@ -35,16 +43,23 @@ export class AuthService {
       // 复制代码运行请自行打印 API 的返回值
       await client.sendSmsWithOptions(sendSmsRequest, runtime);
       const user = await this.userService.findByTel(tel);
-      console.log('user found', user);
       if (user) {
-        const result = await this.userService.updateCode(user.id, code);
-        console.log('result', result);
+        const result = await this.userService.updateCode(
+          user.id,
+          code,
+          new Date(),
+        );
         if (result) {
-          return true;
+          return {
+            code: SUCCESS,
+            message: '获取验证码成功',
+          };
         }
-        return false;
+        return {
+          code: UPDATE_ERROR,
+          message: '更新 code 失败',
+        };
       }
-      console.log('new Date()', new Date());
       await this.userService.create({
         tel,
         code,
@@ -55,7 +70,7 @@ export class AuthService {
       // 错误 message
       console.log(error.message);
       // 诊断地址
-      console.log(error.data['Recommend']);
+      // console.log(error.data['Recommend']);
     }
   }
 }

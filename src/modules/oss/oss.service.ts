@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import dayjs from 'dayjs';
 import OSS from 'ali-oss';
 import { OSSType } from './dto/oss.type';
-import { ACCESS_KEY_ID, ACCESS_KEY_SECRET } from 'src/common/constants/aliyun';
+import { ACCESS_KEY_ID, ACCESS_KEY_SECRET } from '@/common/constants/aliyun';
 
 @Injectable()
 export class OSSService {
