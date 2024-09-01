@@ -55,5 +55,5 @@ export class Result {
   @Field(() => Int)
   code: number;
   @Field(() => String)
-  message: string;
+  message?: string;
 }

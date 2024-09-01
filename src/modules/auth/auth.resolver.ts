@@ -4,18 +4,24 @@ import { UserService } from '../user/user.service';
 import dayjs from 'dayjs';
 import { Result } from '@/dto/result.type';
 import {
+  ACCOUNT_EXIST,
   ACCOUNT_NOT_EXIST,
   CODE_EXPIRE,
   CODE_NOT_EXIST,
   LOGIN_ERROR,
+  REGISTER_ERROR,
   SUCCESS,
 } from '@/common/constants/code';
+import { accountAndPwdValidate } from '@/shared/utills';
+import { StudentService } from '../student/student.service';
+import md5 from 'md5';
 
 @Resolver()
 export class AuthResolver {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly studentService: StudentService,
   ) {}
 
   @Mutation(() => Result, { description: '发送验证码' })
@@ -61,6 +67,38 @@ export class AuthResolver {
     return {
       code: LOGIN_ERROR,
       message: '登录失败，手机号或验证码不对',
+    };
+  }
+
+  @Mutation(() => Result, { description: '学员注册' })
+  async studentRegister(
+    @Args('account') account: string,
+    @Args('password') password: string,
+  ): Promise<Result> {
+    const result = accountAndPwdValidate(account, password);
+    if (result.code !== SUCCESS) {
+      return result;
+    }
+    const student = await this.studentService.findByAccount(account);
+    if (student) {
+      return {
+        code: ACCOUNT_EXIST,
+        message: '账号已经存在，请使用其他账号',
+      };
+    }
+    const res = await this.studentService.create({
+      account,
+      password: md5(password),
+    });
+    if (res) {
+      return {
+        code: SUCCESS,
+        message: '注册成功',
+      };
+    }
+    return {
+      code: REGISTER_ERROR,
+      message: '注册失败',
     };
   }
 }
