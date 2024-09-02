@@ -63,6 +63,9 @@ type Mutation {
 
   """学员注册"""
   studentRegister(account: String!, password: String!): Result!
+
+  """学员登录"""
+  studentLogin(account: String!, password: String!): Result!
 }
 
 input UserInput {

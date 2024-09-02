@@ -70,6 +70,7 @@ export class AuthResolver {
     };
   }
 
+  // 学员注册
   @Mutation(() => Result, { description: '学员注册' })
   async studentRegister(
     @Args('account') account: string,
@@ -99,6 +100,36 @@ export class AuthResolver {
     return {
       code: REGISTER_ERROR,
       message: '注册失败',
+    };
+  }
+
+  // 学员登录
+  @Mutation(() => Result, { description: '学员登录' })
+  async studentLogin(
+    @Args('account') account: string,
+    @Args('password') password: string,
+  ): Promise<Result> {
+    const result = accountAndPwdValidate(account, password);
+    if (result.code !== SUCCESS) {
+      return result;
+    }
+    const student = await this.studentService.findByAccount(account);
+    if (!student) {
+      return {
+        code: ACCOUNT_NOT_EXIST,
+        message: '账号不存在',
+      };
+    }
+    // 需要对密码进行 md5 加密
+    if (student.password === md5(password)) {
+      return {
+        code: SUCCESS,
+        message: '登录成功',
+      };
+    }
+    return {
+      code: LOGIN_ERROR,
+      message: '登录失败，账号或者密码不对',
     };
   }
 }

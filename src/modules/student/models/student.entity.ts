@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 
-@Entity('Student')
+@Entity('student') // 表名不能大写
 export class Student {
   @PrimaryGeneratedColumn('uuid')
   id: string;

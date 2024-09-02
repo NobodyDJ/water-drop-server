@@ -11,6 +11,8 @@ export const accountAndPwdValidate = (
       message: '账号或者密码不能为空',
     };
   }
+  console.log('account', account);
+  console.log(/^(?![0-9]+$)(?![a-z]+$)[a-z0-9]{6,10}$/.test(account));
   if (!/^(?![0-9]+$)(?![a-z]+$)[a-z0-9]{6,10}$/.test(account)) {
     return {
       code: VALIDATE_ERROR,
