@@ -15,6 +15,7 @@ import {
 import { accountAndPwdValidate } from '@/shared/utills';
 import { StudentService } from '../student/student.service';
 import md5 from 'md5';
+import { JwtService } from '@nestjs/jwt';
 
 @Resolver()
 export class AuthResolver {
@@ -22,6 +23,7 @@ export class AuthResolver {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly studentService: StudentService,
+    private readonly jwtService: JwtService,
   ) {}
 
   @Mutation(() => Result, { description: '发送验证码' })
@@ -59,9 +61,14 @@ export class AuthResolver {
       };
     }
     if (user.code === code) {
+      // 登录成功后，生成token
+      const token = this.jwtService.sign({
+        id: user.id,
+      });
       return {
         code: SUCCESS,
         message: '登录成功',
+        data: token,
       };
     }
     return {

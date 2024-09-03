@@ -56,4 +56,6 @@ export class Result {
   code: number;
   @Field(() => String)
   message?: string;
+  @Field(() => String, { nullable: true })
+  data?: string;
 }

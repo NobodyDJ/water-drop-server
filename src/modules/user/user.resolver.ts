@@ -2,8 +2,11 @@ import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UserInput } from './dto/user-input.type';
 import { UserType } from './dto/user.type';
+import { GqlAuthGuard } from '@/guards/auth.guard';
+import { UseGuards } from '@nestjs/common';
 
 @Resolver()
+@UseGuards(GqlAuthGuard)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
@@ -12,7 +15,7 @@ export class UserResolver {
     return await this.userService.create(params);
   }
 
-  @Query(() => UserType, { description: '查询用户信息' })
+  @Query(() => UserType, { description: '根据 ID 查询用户信息' })
   async find(@Args('id') id: string): Promise<UserType> {
     return await this.userService.find(id);
   }

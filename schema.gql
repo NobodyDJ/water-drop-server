@@ -35,10 +35,11 @@ type OSSType {
 type Result {
   code: Int!
   message: String!
+  data: String
 }
 
 type Query {
-  """查询用户信息"""
+  """根据 ID 查询用户信息"""
   find(id: String!): UserType!
 
   """获取oss相关信息"""
