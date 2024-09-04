@@ -62,6 +62,7 @@ export class AuthResolver {
     }
     if (user.code === code) {
       // 登录成功后，生成token
+      // 注意此处生成的token信息中存在user的id
       const token = this.jwtService.sign({
         id: user.id,
       });
