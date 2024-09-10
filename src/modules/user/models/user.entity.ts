@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { IsNotEmpty } from 'class-validator';
 
 @Entity('user')
 export class User {
@@ -10,7 +9,6 @@ export class User {
     comment: '昵称',
     default: '',
   })
-  @IsNotEmpty()
   name: string;
 
   @Column({
@@ -47,4 +45,10 @@ export class User {
     nullable: true,
   })
   codeCreateTimeAt: Date;
+
+  @Column({
+    comment: '头像',
+    nullable: true,
+  })
+  avatar: string;
 }

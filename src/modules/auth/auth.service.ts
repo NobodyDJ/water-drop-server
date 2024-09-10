@@ -11,6 +11,7 @@ import {
   SUCCESS,
   CODE_NOT_EXPIRE,
   UPDATE_ERROR,
+  CODE_SEND_ERROR,
 } from '@/common/constants/code';
 import { Result } from '@/dto/result.type';
 @Injectable()
@@ -65,10 +66,18 @@ export class AuthService {
         code,
         codeCreateTimeAt: new Date(),
       });
+      return {
+        code: SUCCESS,
+        message: '用户创建并获取验证码成功',
+      };
     } catch (error) {
       // 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
       // 错误 message
       console.log(error.message);
+      return {
+        code: CODE_SEND_ERROR,
+        message: '发送验证码失败，请稍后再试',
+      };
       // 诊断地址
       // console.log(error.data['Recommend']);
     }

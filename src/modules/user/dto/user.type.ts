@@ -14,4 +14,6 @@ export class UserType {
   tel?: string;
   @Field()
   code?: string;
+  @Field({ description: '头像', nullable: true })
+  avatar?: string;
 }
