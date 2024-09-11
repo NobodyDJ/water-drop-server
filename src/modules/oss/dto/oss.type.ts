@@ -12,6 +12,6 @@ export class OSSType {
   accessId: string;
   @Field({ description: 'host' })
   host: string;
-  // @Field({ description: '文件夹' })
-  // dir: string;
+  @Field({ description: '文件夹' })
+  dir?: string;
 }

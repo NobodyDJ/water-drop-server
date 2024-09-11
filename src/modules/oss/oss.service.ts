@@ -35,7 +35,7 @@ export class OSSService {
 
     // 计算签名。
     const formData = await client.calculatePostSignature(policy);
-
+    console.log('formData', formData);
     // 返回参数。
     const params = {
       expire: dayjs(date).unix().toString(),
@@ -43,6 +43,7 @@ export class OSSService {
       signature: formData.Signature,
       accessId: formData.OSSAccessKeyId,
       host,
+      dir: '/images',
     };
     return params;
   }

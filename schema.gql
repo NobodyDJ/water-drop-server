@@ -39,6 +39,9 @@ type OSSType {
 
   """host"""
   host: String!
+
+  """文件夹"""
+  dir: String!
 }
 
 type Query {
