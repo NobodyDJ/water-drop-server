@@ -34,4 +34,12 @@ export class StudentService {
       },
     });
   }
+
+  async updateById(id: string, entity: DeepPartial<Student>): Promise<boolean> {
+    const res = await this.studentRepository.update(id, entity);
+    if (res.affected > 0) {
+      return true;
+    }
+    return false;
+  }
 }

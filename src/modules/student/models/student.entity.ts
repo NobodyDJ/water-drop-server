@@ -21,7 +21,7 @@ export class Student {
 
   @Column({
     comment: '手机号',
-    nullable: true,
+    default: '',
   })
   tel: string;
 

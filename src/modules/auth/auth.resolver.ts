@@ -130,9 +130,13 @@ export class AuthResolver {
     }
     // 需要对密码进行 md5 加密
     if (student.password === md5(password)) {
+      const token = this.jwtService.sign({
+        id: student.id,
+      });
       return {
         code: SUCCESS,
         message: '登录成功',
+        data: token,
       };
     }
     return {

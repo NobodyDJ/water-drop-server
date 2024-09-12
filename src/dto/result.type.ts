@@ -15,6 +15,7 @@ interface IResults<T> {
   data?: T[];
   page?: Page;
 }
+
 // 生成器，生成一个实例
 export function createResult<T extends object>(
   ItemType: ClassType<T>,
@@ -49,7 +50,7 @@ export function createResults<T extends object>(
   return Results;
 }
 
-// 一个短信示例
+// 登录成功示例携带token
 @ObjectType()
 export class Result {
   @Field(() => Int)
