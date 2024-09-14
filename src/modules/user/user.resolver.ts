@@ -2,9 +2,9 @@ import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UserInput } from './dto/user-input.type';
 import { UserType } from './dto/user.type';
-import { GqlAuthGuard } from '@/guards/auth.guard';
+import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
-import { Result } from '@/dto/result.type';
+import { Result } from '@/common/dto/result.type';
 import { SUCCESS, UPDATE_ERROR } from '@/common/constants/code';
 
 @Resolver()
@@ -23,10 +23,9 @@ export class UserResolver {
   }
 
   @Query(() => UserType, { description: '根据 ID 查询用户信息' })
-  // 此处的cxt包含了发送请求的请求信息和响应信息
-  async getUserInfo(@Context() cxt: any): Promise<UserType> {
-    console.log('cxt', cxt.req);
-    const id = cxt.req.user.id;
+  // 此处的ctx包含了发送请求的请求信息和响应信息
+  async getUserInfo(@Context() ctx: any): Promise<UserType> {
+    const id = ctx.req.user.id;
     return await this.userService.find(id);
   }
 

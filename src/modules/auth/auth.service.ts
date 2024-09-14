@@ -13,7 +13,7 @@ import {
   UPDATE_ERROR,
   CODE_SEND_ERROR,
 } from '@/common/constants/code';
-import { Result } from '@/dto/result.type';
+import { Result } from '@/common/dto/result.type';
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService) {}

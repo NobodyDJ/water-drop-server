@@ -2,7 +2,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import dayjs from 'dayjs';
-import { Result } from '@/dto/result.type';
+import { Result } from '@/common/dto/result.type';
 import {
   ACCOUNT_EXIST,
   ACCOUNT_NOT_EXIST,

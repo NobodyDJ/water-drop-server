@@ -98,7 +98,7 @@ type Mutation {
   studentLogin(account: String!, password: String!): Result!
 
   """更新学员"""
-  commitStudentInfo(id: String!, params: StudentInput!): Result!
+  commitStudentInfo(params: StudentInput!): Result!
 }
 
 input UserInput {
