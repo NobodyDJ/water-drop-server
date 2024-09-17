@@ -42,4 +42,20 @@ export class StudentService {
     }
     return false;
   }
+
+  async findStudents({
+    start,
+    length,
+  }: {
+    start: number;
+    length: number;
+  }): Promise<[Student[], number]> {
+    return this.studentRepository.findAndCount({
+      take: length,
+      skip: start,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
 }

@@ -3,13 +3,13 @@ import { Page } from './page.type';
 import { ClassType } from 'type-graphql';
 
 // 接口数据结构规范
-interface IResult<T> {
+export interface IResult<T> {
   code: number;
   message?: string;
   data?: T;
 }
 
-interface IResults<T> {
+export interface IResults<T> {
   code: number;
   message?: string;
   data?: T[];
@@ -42,7 +42,7 @@ export function createResults<T extends object>(
     code: number;
     @Field(() => String)
     message?: string;
-    @Field(() => ItemType, { nullable: true })
+    @Field(() => [ItemType], { nullable: true })
     data?: T[];
     @Field(() => Page, { nullable: true })
     page?: Page;

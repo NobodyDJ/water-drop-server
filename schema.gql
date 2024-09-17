@@ -18,6 +18,12 @@ type UserType {
   avatar: String
 }
 
+type Page {
+  total: Int!
+  start: Int!
+  length: Int!
+}
+
 type Result {
   code: Int!
   message: String!
@@ -45,11 +51,16 @@ type OSSType {
 }
 
 type StudentType {
-  """id"""
   id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
 
   """用户名"""
-  name: String!
+  name: String
 
   """账户信息"""
   account: String!
@@ -59,6 +70,24 @@ type StudentType {
 
   """头像"""
   avatar: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type StudentResult {
+  code: Int!
+  message: String!
+  data: StudentType
+}
+
+type StudentResults {
+  code: Int!
+  message: String!
+  data: [StudentType!]
+  page: Page
 }
 
 type Query {
@@ -72,7 +101,13 @@ type Query {
   getOSSInfo: OSSType!
 
   """根据 ID 查询学员信息"""
-  getStudentInfo: StudentType!
+  getStudentInfo: StudentResult!
+  getStudents(page: PageInput!): StudentResults!
+}
+
+input PageInput {
+  start: Float!
+  length: Float!
 }
 
 type Mutation {
@@ -98,7 +133,7 @@ type Mutation {
   studentLogin(account: String!, password: String!): Result!
 
   """更新学员"""
-  commitStudentInfo(params: StudentInput!): Result!
+  commitStudentInfo(params: StudentInput!): StudentResult!
 }
 
 input UserInput {

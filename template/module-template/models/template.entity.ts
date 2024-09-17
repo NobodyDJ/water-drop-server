@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { CommonEntity } from '@/common/entities/common.entity';
 
-@Entity('student') // 表名不能大写
-export class Student extends CommonEntity {
+@Entity('template') // 表名不能大写
+export class Template extends CommonEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

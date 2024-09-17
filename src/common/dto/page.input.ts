@@ -1,15 +1,15 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { isInt, Min } from 'class-validator';
+import { IsInt, Min } from 'class-validator';
 
 @InputType()
 export class PageInput {
   @Field()
-  @isInt()
+  @IsInt()
   @Min(0)
   start: number;
 
   @Field()
-  @isInt()
+  @IsInt()
   @Min(0)
   length: number;
 }

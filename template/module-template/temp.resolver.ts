@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { StudentService } from './student.service';
+import { TemplateService } from './temp.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
 import {
@@ -7,20 +7,20 @@ import {
   SUCCESS,
   UPDATE_ERROR,
 } from '@/common/constants/code';
-import { StudentInput } from './dto/student-input.type';
+import { TemplateInput } from './dto/temp-input.type';
 import { CurUserId } from '@/common/decorates/current-user.decorate';
-import { StudentResult, StudentResults } from './dto/result-student.output';
+import { TemplateResult, TemplateResults } from './dto/result-temp.output';
 import { PageInput } from '@/common/dto/page.input';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
-export class StudentResolver {
-  constructor(private readonly studentService: StudentService) {}
+export class TemplateResolver {
+  constructor(private readonly templateService: TemplateService) {}
 
-  @Query(() => StudentResult, { description: '根据 ID 查询学员信息' })
+  @Query(() => TemplateResult, { description: '根据 ID 查询学员信息' })
   // 此处的ctx包含了发送请求的请求信息和响应信息
-  async getStudentInfo(@CurUserId() id: string): Promise<StudentResult> {
-    const result = await this.studentService.findById(id);
+  async getTemplateInfo(@CurUserId() id: string): Promise<TemplateResult> {
+    const result = await this.templateService.findById(id);
     if (result) {
       return {
         code: SUCCESS,
@@ -34,12 +34,12 @@ export class StudentResolver {
     };
   }
 
-  @Mutation(() => StudentResult, { description: '更新学员' })
-  async commitStudentInfo(
-    @Args('params') params: StudentInput,
+  @Mutation(() => TemplateResult, { description: '更新学员' })
+  async commitTemplateInfo(
+    @Args('params') params: TemplateInput,
     @CurUserId() userId: string,
-  ): Promise<StudentResult> {
-    const res = await this.studentService.updateById(userId, params);
+  ): Promise<TemplateResult> {
+    const res = await this.templateService.updateById(userId, params);
     if (res) {
       return {
         code: SUCCESS,
@@ -52,10 +52,10 @@ export class StudentResolver {
     };
   }
 
-  @Query(() => StudentResults)
-  async getStudents(@Args('page') page: PageInput): Promise<StudentResults> {
+  @Query(() => TemplateResults)
+  async getTemplates(@Args('page') page: PageInput): Promise<TemplateResults> {
     const { start, length } = page;
-    const [results, total] = await this.studentService.findStudents({
+    const [results, total] = await this.templateService.findTemplates({
       start,
       length,
     });
