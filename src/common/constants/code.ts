@@ -11,3 +11,5 @@ export const REGISTER_ERROR = 10009;
 export const NOT_EMPTY = 10010;
 export const VALIDATE_ERROR = 10011;
 export const STUDENT_NOT_EXIST = 10012;
+export const ORG_NOT_EXIST = 10013;
+export const ORG_FAIL = 10014;

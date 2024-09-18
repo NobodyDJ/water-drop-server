@@ -5,7 +5,7 @@ export class Page {
   @Field(() => Int)
   total: number;
   @Field(() => Int)
-  start?: number;
+  pageNum?: number;
   @Field(() => Int)
-  length?: number;
+  pageSize?: number;
 }

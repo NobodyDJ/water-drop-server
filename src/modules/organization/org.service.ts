@@ -28,6 +28,8 @@ export class OrganizationService {
       where: {
         id,
       },
+      // 关联表查询需要添加relations字段，值为数组值为相关的外键
+      relations: ['orgFrontImg', 'orgRoomImg', 'orgOtherImg'],
     });
   }
 
@@ -61,6 +63,7 @@ export class OrganizationService {
       order: {
         createdAt: 'DESC',
       },
+      relations: ['orgFrontImg', 'orgRoomImg', 'orgOtherImg'],
     });
   }
 

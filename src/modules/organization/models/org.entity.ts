@@ -78,14 +78,20 @@ export class Organization extends CommonEntity {
   tel: string;
 
   // 封面图
-  @OneToMany(() => OrgImage, (OrgImage) => OrgImage.orgIdForFront)
+  @OneToMany(() => OrgImage, (orgImage) => orgImage.orgIdForFront, {
+    cascade: true,
+  })
   orgFrontImg?: OrgImage[];
 
   // 室内图
-  @OneToMany(() => OrgImage, (OrgImage) => OrgImage.orgIdForRoom)
+  @OneToMany(() => OrgImage, (orgImage) => orgImage.orgIdForRoom, {
+    cascade: true,
+  })
   orgRoomImg?: OrgImage[];
 
   // 其他图
-  @OneToMany(() => OrgImage, (OrgImage) => OrgImage.orgIdForOther)
+  @OneToMany(() => OrgImage, (orgImage) => orgImage.orgIdForOther, {
+    cascade: true,
+  })
   orgOtherImg?: OrgImage[];
 }

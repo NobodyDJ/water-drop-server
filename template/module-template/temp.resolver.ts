@@ -54,18 +54,18 @@ export class TemplateResolver {
 
   @Query(() => TemplateResults)
   async getTemplates(@Args('page') page: PageInput): Promise<TemplateResults> {
-    const { start, length } = page;
+    const { pageNum, pageSize } = page;
     const [results, total] = await this.templateService.findTemplates({
-      start,
-      length,
+      start: (pageNum - 1) * 10,
+      length: pageSize,
     });
     return {
       code: SUCCESS,
       message: '获取成功',
       data: results,
       page: {
-        start,
-        length,
+        pageNum,
+        pageSize,
         total,
       },
     };

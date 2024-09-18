@@ -20,8 +20,8 @@ type UserType {
 
 type Page {
   total: Int!
-  start: Int!
-  length: Int!
+  pageNum: Int!
+  pageSize: Int!
 }
 
 type Result {
@@ -90,6 +90,77 @@ type StudentResults {
   page: Page
 }
 
+type OrgImageType {
+  id: String
+  url: String!
+  remark: String
+}
+
+type OrganizationType {
+  id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """营业执照"""
+  businessLicense: String!
+
+  """法人身份证正面"""
+  identityCardFrontImg: String!
+
+  """法人身份证反面"""
+  identityCardBackImg: String!
+
+  """标签 以，隔开"""
+  tags: String
+
+  """简介"""
+  description: String
+
+  """机构名"""
+  name: String
+
+  """logo"""
+  logo: String
+
+  """地址"""
+  address: String
+
+  """经度"""
+  longitude: String
+
+  """纬度"""
+  latitude: String
+
+  """电话"""
+  tel: String
+
+  """封面图"""
+  orgFrontImg: [OrgImageType!]
+
+  """室内图"""
+  orgRoomImg: [OrgImageType!]
+
+  """其他图"""
+  orgOtherImg: [OrgImageType!]
+}
+
+type OrganizationResult {
+  code: Int!
+  message: String!
+  data: OrganizationType
+}
+
+type OrganizationResults {
+  code: Int!
+  message: String!
+  data: [OrganizationType!]
+  page: Page
+}
+
 type Query {
   """根据 ID 查询用户信息"""
   find(id: String!): UserType!
@@ -103,11 +174,15 @@ type Query {
   """根据 ID 查询学员信息"""
   getStudentInfo: StudentResult!
   getStudents(page: PageInput!): StudentResults!
+
+  """根据 ID 查询学员信息"""
+  getOrganizationInfo(id: String!): OrganizationResult!
+  getOrganizations(page: PageInput!): OrganizationResults!
 }
 
 input PageInput {
-  start: Float!
-  length: Float!
+  pageNum: Float!
+  pageSize: Float!
 }
 
 type Mutation {
@@ -134,6 +209,9 @@ type Mutation {
 
   """更新学员"""
   commitStudentInfo(params: StudentInput!): StudentResult!
+
+  """更新门店"""
+  commitOrganizationInfo(params: OrganizationInput!, id: String): OrganizationResult!
 }
 
 input UserInput {
@@ -156,4 +234,54 @@ input StudentInput {
 
   """头像"""
   avatar: String!
+}
+
+input OrganizationInput {
+  """名称"""
+  name: String!
+
+  """logo"""
+  logo: String!
+
+  """手机号"""
+  tel: String
+
+  """tags"""
+  tags: String
+
+  """longitude"""
+  longitude: String
+
+  """latitude"""
+  latitude: String
+
+  """latitude"""
+  address: String
+
+  """营业执照"""
+  businessLicense: String!
+
+  """description"""
+  description: String!
+
+  """法人身份证正面"""
+  identityCardFrontImg: String!
+
+  """法人身份证反面"""
+  identityCardBackImg: String!
+
+  """机构门面照片"""
+  orgFrontImg: [OrgImageInput!]
+
+  """机构环境照片"""
+  orgRoomImg: [OrgImageInput!]
+
+  """机构其他照片"""
+  orgOtherImg: [OrgImageInput!]
+}
+
+input OrgImageInput {
+  id: String
+  url: String!
+  remark: String
 }

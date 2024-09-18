@@ -2,11 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { OrganizationService } from './org.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
-import {
-  STUDENT_NOT_EXIST,
-  SUCCESS,
-  UPDATE_ERROR,
-} from '@/common/constants/code';
+import { ORG_FAIL, ORG_NOT_EXIST, SUCCESS } from '@/common/constants/code';
 import { OrganizationInput } from './dto/org-input.type';
 import { CurUserId } from '@/common/decorates/current-user.decorate';
 import {
@@ -14,16 +10,20 @@ import {
   OrganizationResults,
 } from './dto/result-org.output';
 import { PageInput } from '@/common/dto/page.input';
+import { OrgImageService } from '../orgImage/orgImage.service';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
 export class OrganizationResolver {
-  constructor(private readonly organizationService: OrganizationService) {}
+  constructor(
+    private readonly organizationService: OrganizationService,
+    private readonly orgImageService: OrgImageService,
+  ) {}
 
   @Query(() => OrganizationResult, { description: '根据 ID 查询学员信息' })
   // 此处的ctx包含了发送请求的请求信息和响应信息
   async getOrganizationInfo(
-    @CurUserId() id: string,
+    @Args('id') id: string,
   ): Promise<OrganizationResult> {
     const result = await this.organizationService.findById(id);
     if (result) {
@@ -34,26 +34,59 @@ export class OrganizationResolver {
       };
     }
     return {
-      code: STUDENT_NOT_EXIST,
-      message: '用户信息不存在',
+      code: ORG_NOT_EXIST,
+      message: '门店信息不存在',
     };
   }
 
-  @Mutation(() => OrganizationResult, { description: '更新学员' })
+  @Mutation(() => OrganizationResult, { description: '更新门店' })
   async commitOrganizationInfo(
     @Args('params') params: OrganizationInput,
     @CurUserId() userId: string,
+    @Args('id', { nullable: true }) id?: string,
   ): Promise<OrganizationResult> {
-    const res = await this.organizationService.updateById(userId, params);
-    if (res) {
+    if (id) {
+      const organization = await this.organizationService.findById(id);
+      console.log('organization', organization);
+      if (!organization) {
+        return {
+          code: ORG_NOT_EXIST,
+          message: '门店信息不存在',
+        };
+      }
+    }
+    // 此处门店关联图片有问题，如果修改原来已经有的图片，会造成数据库中出现脏数据
+    // 需要将原来创建的图片删除
+    const delRes = await this.orgImageService.deleteByOrg(id);
+    if (!delRes) {
+      return {
+        code: ORG_FAIL,
+        message: '图片删除不成功，无法更新门店信息',
+      };
+    }
+    const organization = await this.organizationService.updateById(id, {
+      ...params,
+      updatedBy: userId,
+    });
+    if (organization) {
       return {
         code: SUCCESS,
         message: '更新成功',
       };
     }
+    const res = await this.organizationService.create({
+      ...params,
+      createdBy: userId,
+    });
+    if (res) {
+      return {
+        code: SUCCESS,
+        message: '创建成功',
+      };
+    }
     return {
-      code: UPDATE_ERROR,
-      message: '用户信息不存在',
+      code: ORG_FAIL,
+      message: '操作失败',
     };
   }
 
@@ -61,18 +94,18 @@ export class OrganizationResolver {
   async getOrganizations(
     @Args('page') page: PageInput,
   ): Promise<OrganizationResults> {
-    const { start, length } = page;
+    const { pageNum, pageSize } = page;
     const [results, total] = await this.organizationService.findOrganizations({
-      start,
-      length,
+      start: (pageNum - 1) * pageSize,
+      length: pageSize,
     });
     return {
       code: SUCCESS,
       message: '获取成功',
       data: results,
       page: {
-        start,
-        length,
+        pageNum,
+        pageSize,
         total,
       },
     };
