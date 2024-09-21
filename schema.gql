@@ -175,7 +175,7 @@ type Query {
   getStudentInfo: StudentResult!
   getStudents(page: PageInput!): StudentResults!
 
-  """根据 ID 查询学员信息"""
+  """根据 ID 查询门店信息"""
   getOrganizationInfo(id: String!): OrganizationResult!
   getOrganizations(page: PageInput!): OrganizationResults!
 }
@@ -212,6 +212,7 @@ type Mutation {
 
   """更新门店"""
   commitOrganizationInfo(params: OrganizationInput!, id: String): OrganizationResult!
+  deleteOrganization(id: String!): Result!
 }
 
 input UserInput {

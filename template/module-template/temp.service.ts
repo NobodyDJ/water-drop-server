@@ -20,14 +20,6 @@ export class TemplateService {
     return false;
   }
 
-  async findByAccount(account: string): Promise<Template> {
-    return this.templateRepository.findOne({
-      where: {
-        account,
-      },
-    });
-  }
-
   async findById(id: string): Promise<Template> {
     return this.templateRepository.findOne({
       where: {

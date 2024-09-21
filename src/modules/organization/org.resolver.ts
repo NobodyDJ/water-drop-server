@@ -11,6 +11,7 @@ import {
 } from './dto/result-org.output';
 import { PageInput } from '@/common/dto/page.input';
 import { OrgImageService } from '../orgImage/orgImage.service';
+import { Result } from '@/common/dto/result.type';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
@@ -20,7 +21,7 @@ export class OrganizationResolver {
     private readonly orgImageService: OrgImageService,
   ) {}
 
-  @Query(() => OrganizationResult, { description: '根据 ID 查询学员信息' })
+  @Query(() => OrganizationResult, { description: '根据 ID 查询门店信息' })
   // 此处的ctx包含了发送请求的请求信息和响应信息
   async getOrganizationInfo(
     @Args('id') id: string,
@@ -108,6 +109,32 @@ export class OrganizationResolver {
         pageSize,
         total,
       },
+    };
+  }
+
+  // 删除门店信息 软删除
+  @Mutation(() => Result)
+  async deleteOrganization(
+    @Args('id') id: string,
+    @CurUserId() userId: string,
+  ): Promise<Result> {
+    const result = await this.organizationService.findById(id);
+    if (result) {
+      const delRes = await this.organizationService.deleteById(id, userId);
+      if (delRes) {
+        return {
+          code: SUCCESS,
+          message: '删除成功',
+        };
+      }
+      return {
+        code: ORG_FAIL,
+        message: '删除失败',
+      };
+    }
+    return {
+      code: ORG_NOT_EXIST,
+      message: '门店信息不存在',
     };
   }
 }

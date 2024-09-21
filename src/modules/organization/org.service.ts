@@ -37,7 +37,11 @@ export class OrganizationService {
     id: string,
     entity: DeepPartial<Organization>,
   ): Promise<boolean> {
+    if (!id) {
+      return false;
+    }
     const existEntity = await this.findById(id);
+    console.log('existEntity', existEntity);
     if (!existEntity) {
       return false;
     }
