@@ -177,7 +177,7 @@ type Query {
 
   """根据 ID 查询门店信息"""
   getOrganizationInfo(id: String!): OrganizationResult!
-  getOrganizations(page: PageInput!): OrganizationResults!
+  getOrganizations(page: PageInput!, name: String): OrganizationResults!
 }
 
 input PageInput {
