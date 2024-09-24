@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 import { Template } from './models/template.entity';
 
 @Injectable()
@@ -10,6 +10,9 @@ export class TemplateService {
     private templateRepository: Repository<Template>,
   ) {}
 
+  /**
+   * 创建部门
+   */
   async create(entity: DeepPartial<Template>): Promise<boolean> {
     const res = await this.templateRepository.save(
       this.templateRepository.create(entity),
@@ -25,6 +28,8 @@ export class TemplateService {
       where: {
         id,
       },
+      // 关联表查询需要添加relations字段，值为数组值为相关的外键
+      relations: ['orgFrontImg', 'orgRoomImg', 'orgOtherImg'],
     });
   }
 
@@ -32,8 +37,18 @@ export class TemplateService {
     id: string,
     entity: DeepPartial<Template>,
   ): Promise<boolean> {
-    const res = await this.templateRepository.update(id, entity);
-    if (res.affected > 0) {
+    if (!id) {
+      return false;
+    }
+    const existEntity = await this.findById(id);
+    console.log('existEntity', existEntity);
+    if (!existEntity) {
+      return false;
+    }
+    Object.assign(existEntity, entity);
+    const res = await this.templateRepository.save(existEntity);
+    // 为了及时获取更新时间，需要将两个实例进行合并
+    if (res) {
       return true;
     }
     return false;
@@ -42,9 +57,11 @@ export class TemplateService {
   async findTemplates({
     start,
     length,
+    where,
   }: {
     start: number;
     length: number;
+    where: FindOptionsWhere<Template>;
   }): Promise<[Template[], number]> {
     return this.templateRepository.findAndCount({
       take: length,
@@ -52,6 +69,22 @@ export class TemplateService {
       order: {
         createdAt: 'DESC',
       },
+      where,
+      relations: ['orgFrontImg', 'orgRoomImg', 'orgOtherImg'],
     });
+  }
+
+  async deleteById(id: string, userId: string): Promise<boolean> {
+    const res = await this.templateRepository.update(id, {
+      deletedBy: userId,
+    });
+    if (res) {
+      // 软删除
+      const res = await this.templateRepository.softDelete(id);
+      if (res.affected > 0) {
+        return true;
+      }
+    }
+    return false;
   }
 }
