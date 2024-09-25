@@ -2,7 +2,12 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { OrganizationService } from './org.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
-import { ORG_FAIL, ORG_NOT_EXIST, SUCCESS } from '@/common/constants/code';
+import {
+  ORG_DEL_FAIL,
+  ORG_FAIL,
+  ORG_NOT_EXIST,
+  SUCCESS,
+} from '@/common/constants/code';
 import { OrganizationInput } from './dto/org-input.type';
 import { CurUserId } from '@/common/decorates/current-user.decorate';
 import {
@@ -139,7 +144,7 @@ export class OrganizationResolver {
         };
       }
       return {
-        code: ORG_FAIL,
+        code: ORG_DEL_FAIL,
         message: '删除失败',
       };
     }

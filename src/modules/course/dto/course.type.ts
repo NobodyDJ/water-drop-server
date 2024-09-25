@@ -7,25 +7,51 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class CourseType extends CommonType {
   @Field({
-    description: '用户名',
-    nullable: true,
+    description: '课程名称',
   })
   name: string;
 
   @Field({
-    description: '账户信息',
-  })
-  account: string;
-
-  @Field({
-    description: '手机号',
+    description: '课程描述',
     nullable: true,
   })
-  tel: string;
+  desc: string;
 
   @Field({
-    description: '头像',
+    description: '适龄人群',
+  })
+  group: string;
+
+  @Field({
+    description: '适合基础',
+  })
+  baseAbility: string;
+
+  @Field({
+    description: '限制上课人数',
+  })
+  limitNumber: number;
+
+  @Field({
+    description: '持续时间',
+  })
+  duration: number;
+
+  @Field({
+    description: '预约信息',
     nullable: true,
   })
-  avatar: string;
+  reserveInfo: string;
+
+  @Field({
+    description: '退款信息',
+    nullable: true,
+  })
+  refundInfo: string;
+
+  @Field({
+    description: '其他说明信息',
+    nullable: true,
+  })
+  otherInfo: string;
 }
