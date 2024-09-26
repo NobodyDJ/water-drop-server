@@ -61,7 +61,7 @@ export class CourseResolver {
         message: '创建失败',
       };
     }
-    const res = await this.courseService.updateById(userId, params);
+    const res = await this.courseService.updateById(id, params);
     if (res) {
       return {
         code: SUCCESS,
