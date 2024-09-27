@@ -161,6 +161,25 @@ type OrganizationResults {
   page: Page
 }
 
+type OrderTimeType {
+  """开始时间"""
+  startTime: String!
+
+  """结束时间"""
+  endTime: String!
+
+  """key"""
+  key: Float!
+}
+
+type ReducibleTimeType {
+  """周"""
+  week: String!
+
+  """可约时间 json"""
+  orderTime: [OrderTimeType!]!
+}
+
 type CourseType {
   id: String!
   createdAt: DateTime!
@@ -196,6 +215,9 @@ type CourseType {
 
   """其他说明信息"""
   otherInfo: String
+
+  """可约时间"""
+  reducibleTime: [ReducibleTimeType!]
 }
 
 type CourseResult {
@@ -269,7 +291,7 @@ type Mutation {
   deleteOrganization(id: String!): Result!
 
   """更新课程"""
-  commitCourseInfo(params: CourseInput!, id: String): CourseResult!
+  commitCourseInfo(params: PartialCourseInput!, id: String): CourseResult!
   deleteCourse(id: String!): Result!
 }
 
@@ -345,24 +367,24 @@ input OrgImageInput {
   remark: String
 }
 
-input CourseInput {
+input PartialCourseInput {
   """课程名称"""
-  name: String!
+  name: String
 
   """课程描述"""
   desc: String
 
   """适龄人群"""
-  group: String!
+  group: String
 
   """适合基础"""
-  baseAbility: String!
+  baseAbility: String
 
   """限制上课人数"""
-  limitNumber: Float!
+  limitNumber: Float
 
   """持续时间"""
-  duration: Float!
+  duration: Float
 
   """预约信息"""
   reserveInfo: String
@@ -372,4 +394,26 @@ input CourseInput {
 
   """其他说明信息"""
   otherInfo: String
+
+  """可约时间"""
+  reducibleTime: [ReducibleTimeInput!]
+}
+
+input ReducibleTimeInput {
+  """周"""
+  week: String!
+
+  """可约时间 json"""
+  orderTime: [OrderTimeInput!]!
+}
+
+input OrderTimeInput {
+  """开始时间"""
+  startTime: String!
+
+  """结束时间"""
+  endTime: String!
+
+  """key"""
+  key: Float!
 }

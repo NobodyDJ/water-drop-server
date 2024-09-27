@@ -9,7 +9,7 @@ import {
   COURSE_UPDATE_FAIL,
   SUCCESS,
 } from '@/common/constants/code';
-import { CourseInput } from './dto/course-input.type';
+import { PartialCourseInput } from './dto/course-input.type';
 import { CurUserId } from '@/common/decorates/current-user.decorate';
 import { CourseResult, CourseResults } from './dto/result-course.output';
 import { PageInput } from '@/common/dto/page.input';
@@ -41,7 +41,7 @@ export class CourseResolver {
 
   @Mutation(() => CourseResult, { description: '更新课程' })
   async commitCourseInfo(
-    @Args('params') params: CourseInput,
+    @Args('params') params: PartialCourseInput,
     @CurUserId() userId: string,
     @Args('id', { nullable: true }) id: string,
   ): Promise<CourseResult> {
