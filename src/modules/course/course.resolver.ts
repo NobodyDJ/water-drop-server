@@ -16,6 +16,7 @@ import { PageInput } from '@/common/dto/page.input';
 import { Result } from '@/common/dto/result.type';
 import { FindOptionsWhere, Like } from 'typeorm';
 import { Course } from './models/course.entity';
+import { CurOrgId } from '@/common/decorates/current-org.decorate';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
@@ -79,9 +80,10 @@ export class CourseResolver {
     @Args('page') page: PageInput,
     @CurUserId() userId: string,
     @Args('name', { nullable: true }) name?: string,
+    @CurOrgId() orgId: string,
   ): Promise<CourseResults> {
     const { pageNum, pageSize } = page;
-    const where: FindOptionsWhere<Course> = { createdBy: userId };
+    const where: FindOptionsWhere<Course> = { createdBy: userId, orgId };
     console.log('name', name);
     if (name) {
       where.name = Like(`%${name}%`);
