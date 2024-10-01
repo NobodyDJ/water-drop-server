@@ -1,7 +1,8 @@
 import { CommonEntity } from '@/common/entities/common.entity';
 import { IsInt, IsNotEmpty, Min } from 'class-validator';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { ReducibleTimeType } from '../dto/common.type';
+import { Organization } from '@/modules/organization/models/org.entity';
 
 /**
  * 组件
@@ -70,4 +71,11 @@ export class Course extends CommonEntity {
     nullable: true,
   })
   reducibleTime: ReducibleTimeType[];
+
+  // 级联关系只需要添加在两者关系中的一个即可
+  // 级联关系添加在操作频繁的实体中
+  @ManyToOne(() => Organization, (org) => org.courses, {
+    cascade: true,
+  })
+  org: Organization;
 }

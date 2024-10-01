@@ -44,12 +44,16 @@ export class CourseResolver {
   async commitCourseInfo(
     @Args('params') params: PartialCourseInput,
     @CurUserId() userId: string,
+    @CurOrgId() orgId: string,
     @Args('id', { nullable: true }) id: string,
   ): Promise<CourseResult> {
     if (!id) {
       const res = await this.courseService.create({
         ...params,
         createdBy: userId,
+        org: {
+          id: orgId,
+        },
       });
       if (res) {
         return {
@@ -79,11 +83,16 @@ export class CourseResolver {
   async getCourses(
     @Args('page') page: PageInput,
     @CurUserId() userId: string,
-    @Args('name', { nullable: true }) name?: string,
     @CurOrgId() orgId: string,
+    @Args('name', { nullable: true }) name?: string,
   ): Promise<CourseResults> {
     const { pageNum, pageSize } = page;
-    const where: FindOptionsWhere<Course> = { createdBy: userId, orgId };
+    const where: FindOptionsWhere<Course> = {
+      createdBy: userId,
+      org: {
+        id: orgId,
+      },
+    };
     console.log('name', name);
     if (name) {
       where.name = Like(`%${name}%`);
