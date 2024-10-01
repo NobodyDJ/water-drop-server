@@ -233,6 +233,43 @@ type CourseResults {
   page: Page
 }
 
+type CardType {
+  """id"""
+  id: String!
+
+  """名字"""
+  name: String!
+
+  """
+  卡类型 
+       TIME = "time",
+      DURATION = "duration"
+  """
+  type: String!
+
+  """上课次数"""
+  time: Float!
+
+  """有效期 （天）"""
+  validityDay: Float!
+
+  """课程"""
+  course: CourseType!
+}
+
+type CardResult {
+  code: Int!
+  message: String!
+  data: CardType
+}
+
+type CardResults {
+  code: Int!
+  message: String!
+  data: [CardType!]
+  page: Page
+}
+
 type Query {
   """根据 ID 查询用户信息"""
   find(id: String!): UserType!
@@ -254,6 +291,10 @@ type Query {
   """根据 ID 查询学员信息"""
   getCourseInfo(id: String!): CourseResult!
   getCourses(page: PageInput!, name: String): CourseResults!
+
+  """根据 ID 查询消费卡信息"""
+  getCardInfo(id: String!): CardResult!
+  getCards(courseId: String!, name: String): CardResults!
 }
 
 input PageInput {
@@ -293,6 +334,10 @@ type Mutation {
   """更新课程"""
   commitCourseInfo(params: PartialCourseInput!, id: String): CourseResult!
   deleteCourse(id: String!): Result!
+
+  """更新消费卡"""
+  commitCardInfo(params: CardInput!, courseId: String!, id: String): CardResult!
+  deleteStudent(id: String!): Result!
 }
 
 input UserInput {
@@ -416,4 +461,18 @@ input OrderTimeInput {
 
   """key"""
   key: Float!
+}
+
+input CardInput {
+  """名字"""
+  name: String!
+
+  """卡类型 次数：time 时长：duration"""
+  type: String!
+
+  """上课次数"""
+  time: Float
+
+  """有效期 （天）"""
+  validityDay: Float!
 }

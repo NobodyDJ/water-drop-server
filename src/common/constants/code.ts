@@ -19,3 +19,7 @@ export const COURSE_NOT_EXIST = 100017;
 export const COURSE_FAIL = 10018;
 export const COURSE_CREATE_FAIL = 10019;
 export const COURSE_UPDATE_FAIL = 10020;
+export const CARD_CREATE_FAIL = 10021;
+export const CARD_DEL_FAIL = 10022;
+export const CARD_NOT_EXIST = 10023;
+export const CARD_UPDATE_FAIL = 10024;
