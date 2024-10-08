@@ -7,7 +7,7 @@ import {
   SUCCESS,
   UPDATE_ERROR,
 } from '@/common/constants/code';
-import { StudentInput } from './dto/student-input.type';
+import { StudentInput } from './dto/student.input';
 import { CurUserId } from '@/common/decorates/current-user.decorate';
 import { StudentResult, StudentResults } from './dto/result-student.output';
 import { PageInput } from '@/common/dto/page.input';

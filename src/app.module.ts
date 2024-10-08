@@ -1,5 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { ProductModule } from './modules/product/product.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
@@ -38,6 +39,7 @@ import { CardModule } from './modules/card/module-template/card.module';
     OrganizationModule,
     CourseModule,
     CardModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,4 @@
-import { OrgImageInput } from './../../orgImage/dto/orgImage.input';
+import { OrgImageInput } from '../../orgImage/dto/orgImage.input';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()

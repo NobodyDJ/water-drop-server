@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CourseService } from './course.service';
+import { TemplateService } from './temp.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
 import {
@@ -9,24 +9,23 @@ import {
   COURSE_UPDATE_FAIL,
   SUCCESS,
 } from '@/common/constants/code';
-import { PartialCourseInput } from './dto/course.input';
+import { TemplateInput } from './dto/temp-input.type';
 import { CurUserId } from '@/common/decorates/current-user.decorate';
-import { CourseResult, CourseResults } from './dto/result-course.output';
+import { TemplateResult, TemplateResults } from './dto/result-temp.output';
 import { PageInput } from '@/common/dto/page.input';
 import { Result } from '@/common/dto/result.type';
 import { FindOptionsWhere, Like } from 'typeorm';
-import { Course } from './models/course.entity';
-import { CurOrgId } from '@/common/decorates/current-org.decorate';
+import { Template } from './models/template.entity';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
-export class CourseResolver {
-  constructor(private readonly courseService: CourseService) {}
+export class TemplateResolver {
+  constructor(private readonly tempService: TemplateService) {}
 
-  @Query(() => CourseResult, { description: '根据 ID 查询学员信息' })
+  @Query(() => TemplateResult, { description: '根据 ID 查询学员信息' })
   // 此处的ctx包含了发送请求的请求信息和响应信息
-  async getCourseInfo(@Args('id') id: string): Promise<CourseResult> {
-    const result = await this.courseService.findById(id);
+  async getTemplateInfo(@CurUserId() id: string): Promise<TemplateResult> {
+    const result = await this.tempService.findById(id);
     if (result) {
       return {
         code: SUCCESS,
@@ -40,20 +39,16 @@ export class CourseResolver {
     };
   }
 
-  @Mutation(() => CourseResult, { description: '更新课程' })
-  async commitCourseInfo(
-    @Args('params') params: PartialCourseInput,
+  @Mutation(() => TemplateResult, { description: '更新课程' })
+  async commitTemplateInfo(
+    @Args('params') params: TemplateInput,
     @CurUserId() userId: string,
-    @CurOrgId() orgId: string,
     @Args('id', { nullable: true }) id: string,
-  ): Promise<CourseResult> {
+  ): Promise<TemplateResult> {
     if (!id) {
-      const res = await this.courseService.create({
+      const res = await this.tempService.create({
         ...params,
         createdBy: userId,
-        org: {
-          id: orgId,
-        },
       });
       if (res) {
         return {
@@ -66,7 +61,7 @@ export class CourseResolver {
         message: '创建失败',
       };
     }
-    const res = await this.courseService.updateById(id, params);
+    const res = await this.tempService.updateById(userId, params);
     if (res) {
       return {
         code: SUCCESS,
@@ -79,26 +74,18 @@ export class CourseResolver {
     };
   }
 
-  @Query(() => CourseResults)
-  async getCourses(
+  @Query(() => TemplateResults)
+  async getTemplates(
     @Args('page') page: PageInput,
     @CurUserId() userId: string,
-    @CurOrgId() orgId: string,
     @Args('name', { nullable: true }) name?: string,
-  ): Promise<CourseResults> {
+  ): Promise<TemplateResults> {
     const { pageNum, pageSize } = page;
-    const where: FindOptionsWhere<Course> = {
-      createdBy: userId,
-      org: {
-        id: orgId,
-      },
-    };
-    console.log('name', name);
+    const where: FindOptionsWhere<Template> = { createdBy: userId };
     if (name) {
       where.name = Like(`%${name}%`);
     }
-    console.log('where', where);
-    const [results, total] = await this.courseService.findCourses({
+    const [results, total] = await this.tempService.findTemplates({
       start: (pageNum - 1) * pageSize,
       length: pageSize,
       where,
@@ -117,13 +104,13 @@ export class CourseResolver {
 
   // 删除课程信息 软删除
   @Mutation(() => Result)
-  async deleteCourse(
+  async deleteStudent(
     @Args('id') id: string,
     @CurUserId() userId: string,
   ): Promise<Result> {
-    const result = await this.courseService.findById(id);
+    const result = await this.tempService.findById(id);
     if (result) {
-      const delRes = await this.courseService.deleteById(id, userId);
+      const delRes = await this.tempService.deleteById(id, userId);
       if (delRes) {
         return {
           code: SUCCESS,

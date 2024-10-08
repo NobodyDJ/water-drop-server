@@ -8,7 +8,7 @@ import {
   ORG_NOT_EXIST,
   SUCCESS,
 } from '@/common/constants/code';
-import { OrganizationInput } from './dto/org-input.type';
+import { OrganizationInput } from './dto/org.input';
 import { CurUserId } from '@/common/decorates/current-user.decorate';
 import {
   OrganizationResult,
