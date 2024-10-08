@@ -58,7 +58,7 @@ export class CardService {
   }): Promise<[Card[], number]> {
     return this.cardRepository.findAndCount({
       order: {
-        createdAt: 'DESC',
+        createdAt: 'ASC',
       },
       where,
     });

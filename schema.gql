@@ -337,7 +337,7 @@ type Mutation {
 
   """更新消费卡"""
   commitCardInfo(params: CardInput!, courseId: String!, id: String): CardResult!
-  deleteStudent(id: String!): Result!
+  deleteCard(id: String!): Result!
 }
 
 input UserInput {

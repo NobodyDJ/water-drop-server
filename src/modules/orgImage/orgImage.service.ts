@@ -18,7 +18,6 @@ export class OrgImageService {
       .orWhere(`orgImage.orgIdForRoomId = '${id}'`)
       .orWhere(`orgImage.orgIdForOtherId = '${id}'`)
       .getMany();
-    console.log('imgs', imgs);
     if (imgs.length === 0) {
       return true;
     }

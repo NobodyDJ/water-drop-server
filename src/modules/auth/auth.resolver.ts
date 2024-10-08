@@ -85,24 +85,20 @@ export class AuthResolver {
     @Args('password') password: string,
   ): Promise<Result> {
     const result = accountAndPwdValidate(account, password);
-    console.log('result', result);
     if (result.code !== SUCCESS) {
       return result;
     }
     const student = await this.studentService.findByAccount(account);
-    console.log('student', student);
     if (student) {
       return {
         code: ACCOUNT_EXIST,
         message: '账号已经存在，请使用其他账号',
       };
     }
-    console.log(1);
     const res = await this.studentService.create({
       account,
       password: md5(password),
     });
-    console.log('res', res);
     if (res) {
       return {
         code: SUCCESS,

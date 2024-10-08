@@ -20,12 +20,12 @@ import { CurOrgId } from '@/common/decorates/current-org.decorate';
 @Resolver()
 @UseGuards(GqlAuthGuard)
 export class CardResolver {
-  constructor(private readonly tempService: CardService) {}
+  constructor(private readonly cardService: CardService) {}
 
   @Query(() => CardResult, { description: '根据 ID 查询消费卡信息' })
   // 此处的ctx包含了发送请求的请求信息和响应信息
   async getCardInfo(@Args('id') id: string): Promise<CardResult> {
-    const result = await this.tempService.findById(id);
+    const result = await this.cardService.findById(id);
     if (result) {
       return {
         code: SUCCESS,
@@ -48,7 +48,7 @@ export class CardResolver {
     @Args('id', { nullable: true }) id: string,
   ): Promise<CardResult> {
     if (!id) {
-      const res = await this.tempService.create({
+      const res = await this.cardService.create({
         ...params,
         org: {
           id: orgId,
@@ -69,16 +69,26 @@ export class CardResolver {
         message: '创建失败',
       };
     }
-    const res = await this.tempService.updateById(userId, params);
-    if (res) {
+    const card = await this.cardService.findById(id);
+    if (card) {
+      const res = await this.cardService.updateById(card.id, {
+        ...params,
+        updatedBy: userId,
+      });
+      if (res) {
+        return {
+          code: SUCCESS,
+          message: '更新成功',
+        };
+      }
       return {
-        code: SUCCESS,
-        message: '更新成功',
+        code: CARD_UPDATE_FAIL,
+        message: '更新失败',
       };
     }
     return {
-      code: CARD_UPDATE_FAIL,
-      message: '更新失败',
+      code: CARD_NOT_EXIST,
+      message: '消费卡信息不存在',
     };
   }
 
@@ -97,9 +107,10 @@ export class CardResolver {
     if (name) {
       where.name = Like(`%${name}%`);
     }
-    const [results] = await this.tempService.findCards({
+    const [results] = await this.cardService.findCards({
       where,
     });
+    console.log('results', results);
     return {
       code: SUCCESS,
       message: '获取成功',
@@ -109,13 +120,13 @@ export class CardResolver {
 
   // 删除消费卡信息 软删除
   @Mutation(() => Result)
-  async deleteStudent(
+  async deleteCard(
     @Args('id') id: string,
     @CurUserId() userId: string,
   ): Promise<Result> {
-    const result = await this.tempService.findById(id);
+    const result = await this.cardService.findById(id);
     if (result) {
-      const delRes = await this.tempService.deleteById(id, userId);
+      const delRes = await this.cardService.deleteById(id, userId);
       if (delRes) {
         return {
           code: SUCCESS,
