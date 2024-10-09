@@ -10,13 +10,13 @@ import {
   SUCCESS,
 } from '@/common/constants/code';
 import { PartialCourseInput } from './dto/course.input';
-import { CurUserId } from '@/common/decorates/current-user.decorate';
+import { CurUserId } from '@/common/decorators/current-user.decorator';
 import { CourseResult, CourseResults } from './dto/result-course.output';
 import { PageInput } from '@/common/dto/page.input';
 import { Result } from '@/common/dto/result.type';
 import { FindOptionsWhere, Like } from 'typeorm';
 import { Course } from './models/course.entity';
-import { CurOrgId } from '@/common/decorates/current-org.decorate';
+import { CurOrgId } from '@/common/decorators/current-org.decorator';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)

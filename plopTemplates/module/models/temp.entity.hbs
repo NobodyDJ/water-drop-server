@@ -1,5 +1,6 @@
 import { CommonEntity } from '@/common/entities/common.entity';
-import { Column, Entity } from 'typeorm';
+import { Organization } from '@/modules/organization/models/org.entity';
+import { Column, Entity, ManyToOne } from 'typeorm';
 
 /**
  * 组件
@@ -33,4 +34,8 @@ export class {{pascalCase name}} extends CommonEntity {
     comment: '账户',
   })
   account: string;
+  @ManyToOne(() => Organization, (org) => org.{{kebabCase name}}s, {
+    cascade: true,
+  })
+  org: Organization;
 }

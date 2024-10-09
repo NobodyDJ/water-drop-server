@@ -8,7 +8,7 @@ import {
   UPDATE_ERROR,
 } from '@/common/constants/code';
 import { StudentInput } from './dto/student.input';
-import { CurUserId } from '@/common/decorates/current-user.decorate';
+import { CurUserId } from '@/common/decorators/current-user.decorator';
 import { StudentResult, StudentResults } from './dto/result-student.output';
 import { PageInput } from '@/common/dto/page.input';
 

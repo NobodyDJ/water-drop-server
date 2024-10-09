@@ -3,17 +3,43 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class ProductInput {
   @Field({
-    description: '昵称',
+    description: '名称',
   })
   name: string;
 
   @Field({
-    description: '手机号',
+    description: '描述',
+    nullable: true,
   })
-  tel: string;
+  desc: string;
 
   @Field({
-    description: '头像',
+    description: '库存总数',
   })
-  avatar: string;
+  stock: number;
+
+  @Field({
+    description: '每人限购数量',
+  })
+  limitBuyNumber: number;
+
+  @Field({
+    description: '封面图',
+  })
+  coverUrl: string;
+
+  @Field({
+    description: '头部banner图',
+  })
+  bannerUrl: string;
+
+  @Field({
+    description: '原价',
+  })
+  originalPrice: number;
+
+  @Field({
+    description: '优惠价',
+  })
+  preferentialPrice: number;
 }

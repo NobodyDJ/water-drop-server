@@ -10,12 +10,12 @@ import {
   SUCCESS,
 } from '@/common/constants/code';
 import { CardInput } from './dto/card-input.type';
-import { CurUserId } from '@/common/decorates/current-user.decorate';
+import { CurUserId } from '@/common/decorators/current-user.decorator';
 import { CardResult, CardResults } from './dto/result-card.output';
 import { Result } from '@/common/dto/result.type';
 import { FindOptionsWhere, Like } from 'typeorm';
 import { Card } from './models/card.entity';
-import { CurOrgId } from '@/common/decorates/current-org.decorate';
+import { CurOrgId } from '@/common/decorators/current-org.decorator';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)

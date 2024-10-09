@@ -9,7 +9,7 @@ import {
   SUCCESS,
 } from '@/common/constants/code';
 import { OrganizationInput } from './dto/org.input';
-import { CurUserId } from '@/common/decorates/current-user.decorate';
+import { CurUserId } from '@/common/decorators/current-user.decorator';
 import {
   OrganizationResult,
   OrganizationResults,

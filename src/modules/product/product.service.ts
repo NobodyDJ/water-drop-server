@@ -24,6 +24,7 @@ export class ProductService {
       where: {
         id,
       },
+      relations: ['org'],
     });
   }
 
@@ -56,6 +57,7 @@ export class ProductService {
       order: {
         createdAt: 'DESC',
       },
+      relations: ['org'],
     });
   }
 

@@ -4,6 +4,7 @@ import { IsNotEmpty } from 'class-validator';
 import { OrgImage } from '@/modules/orgImage/models/orgImage.entity';
 import { Course } from '@/modules/course/models/course.entity';
 import { Card } from '@/modules/card/module-template/models/card.entity';
+import { Product } from '@/modules/product/models/product.entity';
 
 @Entity('organization') // 表名不能大写
 export class Organization extends CommonEntity {
@@ -100,6 +101,9 @@ export class Organization extends CommonEntity {
   @OneToMany(() => Course, (course) => course.org)
   courses: Course[];
 
-  @OneToMany(() => Card, (org) => org.course)
+  @OneToMany(() => Card, (card) => card.course)
   cards: Card[];
+
+  @OneToMany(() => Product, (product) => product.org)
+  products: Product[];
 }

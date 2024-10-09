@@ -1,10 +1,10 @@
 import { FindOptionsWhere, Like } from 'typeorm';
 import { Product } from './models/product.entity';
 import {
-  COURSE_CREATE_FAIL,
-  COURSE_DEL_FAIL,
-  COURSE_NOT_EXIST,
-  COURSE_UPDATE_FAIL,
+  PRODUCT_CREATE_FAIL,
+  PRODUCT_DEL_FAIL,
+  PRODUCT_NOT_EXIST,
+  PRODUCT_UPDATE_FAIL,
 } from './../../common/constants/code';
 import { Result } from '@/common/dto/result.type';
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
@@ -16,6 +16,7 @@ import { ProductInput } from './dto/product.input';
 import { ProductType } from './dto/product.type';
 import { ProductService } from './product.service';
 import { CurUserId } from '@/common/decorators/current-user.decorator';
+import { CurOrgId } from '@/common/decorators/current-org.decorator';
 import { PageInput } from '@/common/dto/page.input';
 
 @Resolver(() => ProductType)
@@ -34,8 +35,8 @@ export class ProductResolver {
       };
     }
     return {
-      code: COURSE_NOT_EXIST,
-      message: '课程信息不存在',
+      code: PRODUCT_NOT_EXIST,
+      message: '商品信息不存在',
     };
   }
 
@@ -52,7 +53,7 @@ export class ProductResolver {
         createdBy: userId,
         org: {
           id: orgId,
-        }
+        },
       });
       if (res) {
         return {
@@ -61,7 +62,7 @@ export class ProductResolver {
         };
       }
       return {
-        code: COURSE_CREATE_FAIL,
+        code: PRODUCT_CREATE_FAIL,
         message: '创建失败',
       };
     }
@@ -78,13 +79,13 @@ export class ProductResolver {
         };
       }
       return {
-        code: COURSE_UPDATE_FAIL,
+        code: PRODUCT_UPDATE_FAIL,
         message: '更新失败',
       };
     }
     return {
-      code: COURSE_NOT_EXIST,
-      message: '课程信息不存在',
+      code: PRODUCT_NOT_EXIST,
+      message: '商品信息不存在',
     };
   }
 
@@ -131,13 +132,13 @@ export class ProductResolver {
         };
       }
       return {
-        code: COURSE_DEL_FAIL,
+        code: PRODUCT_DEL_FAIL,
         message: '删除失败',
       };
     }
     return {
-      code: COURSE_NOT_EXIST,
-      message: '门店信息不存在',
+      code: PRODUCT_NOT_EXIST,
+      message: '商品信息不存在',
     };
   }
 }
