@@ -5,17 +5,12 @@ import { Field, ObjectType } from '@nestjs/graphql';
  * 学员
  */
 @ObjectType()
-export class TemplateType extends CommonType {
+export class {{pascalCase name}}Type extends CommonType {
   @Field({
-    description: '用户名',
+    description: '昵称',
     nullable: true,
   })
   name: string;
-
-  @Field({
-    description: '账户信息',
-  })
-  account: string;
 
   @Field({
     description: '手机号',
@@ -28,4 +23,10 @@ export class TemplateType extends CommonType {
     nullable: true,
   })
   avatar: string;
+
+  @Field({
+    description: '账号',
+    nullable: true,
+  })
+  account: string;
 }

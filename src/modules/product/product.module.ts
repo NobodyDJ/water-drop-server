@@ -1,12 +1,13 @@
-import { Module, ConsoleLogger } from '@nestjs/common';
+import { ProductResolver } from './product.resolver';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Template } from './models/template.entity';
-import { TemplateService } from './temp.service';
-import { TemplateResolver } from './temp.resolver';
+
+import { Product } from './models/product.entity';
+import { ProductService } from './product.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Template])],
-  providers: [ConsoleLogger, TemplateService, TemplateResolver],
-  exports: [TemplateService],
+  imports: [TypeOrmModule.forFeature([Product])],
+  providers: [ProductService, ProductResolver],
+  exports: [ProductService],
 })
-export class TemplateModule {}
+export class ProductModule {}

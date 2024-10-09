@@ -1,38 +1,36 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { CommonEntity } from '@/common/entities/common.entity';
+import { Column, Entity } from 'typeorm';
 
-@Entity('template') // 表名不能大写
-export class Template extends CommonEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+/**
+ * 组件
+ */
+@Entity('product')
+export class Product extends CommonEntity {
   @Column({
-    comment: '用户名',
+    comment: '昵称',
     default: '',
   })
   name: string;
 
   @Column({
-    comment: '头像',
-    default: '',
-  })
-  avatar: string;
-
-  @Column({
     comment: '手机号',
-    default: '',
+    nullable: true,
   })
   tel: string;
 
   @Column({
-    comment: '密码',
+    comment: '头像',
     nullable: true,
+  })
+  avatar: string;
+
+  @Column({
+    comment: '密码',
   })
   password: string;
 
   @Column({
-    comment: '账户信息',
-    nullable: true,
+    comment: '账户',
   })
   account: string;
 }
