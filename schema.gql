@@ -396,7 +396,7 @@ type Mutation {
   """更新消费卡"""
   commitCardInfo(params: CardInput!, courseId: String!, id: String): CardResult!
   deleteCard(id: String!): Result!
-  commitProductInfo(params: ProductInput!, id: String): ProductResult!
+  commitProductInfo(params: PartialProductInput!, id: String): ProductResult!
   deleteProduct(id: String!): Result!
 }
 
@@ -537,28 +537,28 @@ input CardInput {
   validityDay: Float!
 }
 
-input ProductInput {
+input PartialProductInput {
   """名称"""
-  name: String!
+  name: String
 
   """描述"""
   desc: String
 
   """库存总数"""
-  stock: Float!
+  stock: Float
 
   """每人限购数量"""
-  limitBuyNumber: Float!
+  limitBuyNumber: Float
 
   """封面图"""
-  coverUrl: String!
+  coverUrl: String
 
   """头部banner图"""
-  bannerUrl: String!
+  bannerUrl: String
 
   """原价"""
-  originalPrice: Float!
+  originalPrice: Float
 
   """优惠价"""
-  preferentialPrice: Float!
+  preferentialPrice: Float
 }

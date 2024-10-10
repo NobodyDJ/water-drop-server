@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, PartialType } from '@nestjs/graphql';
 
 @InputType()
 export class ProductInput {
@@ -43,3 +43,6 @@ export class ProductInput {
   })
   preferentialPrice: number;
 }
+
+@InputType()
+export class PartialProductInput extends PartialType(ProductInput) {}

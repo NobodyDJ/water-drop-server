@@ -12,7 +12,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { SUCCESS } from '@/common/constants/code';
 import { ProductResult, ProductResults } from './dto/result-product.output';
-import { ProductInput } from './dto/product.input';
+import { PartialProductInput } from './dto/product.input';
 import { ProductType } from './dto/product.type';
 import { ProductService } from './product.service';
 import { CurUserId } from '@/common/decorators/current-user.decorator';
@@ -42,7 +42,7 @@ export class ProductResolver {
 
   @Mutation(() => ProductResult)
   async commitProductInfo(
-    @Args('params') params: ProductInput,
+    @Args('params') params: PartialProductInput,
     @CurUserId() userId: string,
     @CurOrgId() orgId: string,
     @Args('id', { nullable: true }) id: string,
@@ -93,12 +93,18 @@ export class ProductResolver {
   async getProducts(
     @Args('page') page: PageInput,
     @CurUserId() userId: string,
+    @CurOrgId() orgId: string,
     @Args('name', { nullable: true }) name?: string,
   ): Promise<ProductResults> {
     const { pageNum, pageSize } = page;
     const where: FindOptionsWhere<Product> = { createdBy: userId };
     if (name) {
       where.name = Like(`%${name}%`);
+    }
+    if (orgId) {
+      where.org = {
+        id: orgId,
+      };
     }
     const [results, total] = await this.productService.findProducts({
       start: (pageNum - 1) * pageSize,
