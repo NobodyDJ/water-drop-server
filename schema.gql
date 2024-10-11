@@ -564,4 +564,7 @@ input PartialProductInput {
 
   """优惠价"""
   preferentialPrice: Float
+
+  """消费卡"""
+  cards: [String!]
 }

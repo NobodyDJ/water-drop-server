@@ -51,6 +51,7 @@ export class ProductResolver {
       const res = await this.productService.create({
         ...params,
         createdBy: userId,
+        cards: [],
         org: {
           id: orgId,
         },
@@ -68,10 +69,18 @@ export class ProductResolver {
     }
     const product = await this.productService.findById(id);
     if (product) {
-      const res = await this.productService.updateById(product.id, {
+      const newProduct = {
         ...params,
+        cards: [],
         updatedBy: userId,
-      });
+      };
+      if (params.cards && params.cards.length > 0) {
+        // 修改对象是一个数组，数组里面是卡片对象
+        newProduct.cards = params.cards.map((childId) => ({
+          id: childId,
+        }));
+      }
+      const res = await this.productService.updateById(product.id, newProduct);
       if (res) {
         return {
           code: SUCCESS,

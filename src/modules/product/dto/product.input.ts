@@ -42,6 +42,11 @@ export class ProductInput {
     description: '优惠价',
   })
   preferentialPrice: number;
+
+  @Field(() => [String], {
+    description: '消费卡',
+  })
+  cards: string[];
 }
 
 @InputType()

@@ -24,7 +24,7 @@ export class ProductService {
       where: {
         id,
       },
-      relations: ['org', 'cards'],
+      relations: ['org', 'cards', 'cards.course'],
     });
   }
 
