@@ -1,7 +1,8 @@
 import { CommonEntity } from '@/common/entities/common.entity';
+import { Card } from '@/modules/card/module-template/models/card.entity';
 import { Organization } from '@/modules/organization/models/org.entity';
 import { IsNotEmpty, Min } from 'class-validator';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 
 /**
  * 商品
@@ -70,8 +71,16 @@ export class Product extends CommonEntity {
   @Min(0.01)
   preferentialPrice: number;
 
+  // 商品和门店是多对一的关系
   @ManyToOne(() => Organization, (org) => org.products, {
     cascade: true,
   })
   org: Organization;
+
+  // 商品和消费卡是多对多的关系，需要创建一个中间关联表
+  @ManyToMany(() => Card, { cascade: true })
+  @JoinTable({
+    name: 'product_card',
+  })
+  cards: Card[];
 }

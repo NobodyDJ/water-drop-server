@@ -14,6 +14,94 @@ type Result {
   data: String
 }
 
+type OrderTimeType {
+  """开始时间"""
+  startTime: String!
+
+  """结束时间"""
+  endTime: String!
+
+  """key"""
+  key: Float!
+}
+
+type ReducibleTimeType {
+  """周"""
+  week: String!
+
+  """可约时间 json"""
+  orderTime: [OrderTimeType!]!
+}
+
+type CourseType {
+  id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """课程名称"""
+  name: String!
+
+  """课程描述"""
+  desc: String
+
+  """适龄人群"""
+  group: String!
+
+  """适合基础"""
+  baseAbility: String!
+
+  """限制上课人数"""
+  limitNumber: Float!
+
+  """持续时间"""
+  duration: Float!
+
+  """预约信息"""
+  reserveInfo: String
+
+  """退款信息"""
+  refundInfo: String
+
+  """其他说明信息"""
+  otherInfo: String
+
+  """可约时间"""
+  reducibleTime: [ReducibleTimeType!]
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type CardType {
+  """id"""
+  id: String!
+
+  """名字"""
+  name: String!
+
+  """
+  卡类型 
+       TIME = "time",
+      DURATION = "duration"
+  """
+  type: String!
+
+  """上课次数"""
+  time: Float!
+
+  """有效期 （天）"""
+  validityDay: Float!
+
+  """课程"""
+  course: CourseType!
+}
+
 type OrgImageType {
   id: String
   url: String!
@@ -72,11 +160,6 @@ type OrganizationType {
   orgOtherImg: [OrgImageType!]
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type ProductType {
   id: String!
   createdAt: DateTime!
@@ -118,6 +201,9 @@ type ProductType {
 
   """门店信息"""
   org: OrganizationType!
+
+  """消费卡"""
+  cards: [CardType!]
 }
 
 type ProductResult {
@@ -217,65 +303,6 @@ type OrganizationResults {
   page: Page
 }
 
-type OrderTimeType {
-  """开始时间"""
-  startTime: String!
-
-  """结束时间"""
-  endTime: String!
-
-  """key"""
-  key: Float!
-}
-
-type ReducibleTimeType {
-  """周"""
-  week: String!
-
-  """可约时间 json"""
-  orderTime: [OrderTimeType!]!
-}
-
-type CourseType {
-  id: String!
-  createdAt: DateTime!
-  createdBy: String
-  updatedAt: DateTime
-  updatedBy: String
-  deletedAt: DateTime
-  deletedBy: String
-
-  """课程名称"""
-  name: String!
-
-  """课程描述"""
-  desc: String
-
-  """适龄人群"""
-  group: String!
-
-  """适合基础"""
-  baseAbility: String!
-
-  """限制上课人数"""
-  limitNumber: Float!
-
-  """持续时间"""
-  duration: Float!
-
-  """预约信息"""
-  reserveInfo: String
-
-  """退款信息"""
-  refundInfo: String
-
-  """其他说明信息"""
-  otherInfo: String
-
-  """可约时间"""
-  reducibleTime: [ReducibleTimeType!]
-}
-
 type CourseResult {
   code: Int!
   message: String!
@@ -287,30 +314,6 @@ type CourseResults {
   message: String!
   data: [CourseType!]
   page: Page
-}
-
-type CardType {
-  """id"""
-  id: String!
-
-  """名字"""
-  name: String!
-
-  """
-  卡类型 
-       TIME = "time",
-      DURATION = "duration"
-  """
-  type: String!
-
-  """上课次数"""
-  time: Float!
-
-  """有效期 （天）"""
-  validityDay: Float!
-
-  """课程"""
-  course: CourseType!
 }
 
 type CardResult {
