@@ -61,6 +61,7 @@ export class CardService {
         createdAt: 'ASC',
       },
       where,
+      relations: ['course'],
     });
   }
 
