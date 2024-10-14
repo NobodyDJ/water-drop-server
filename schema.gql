@@ -14,6 +14,58 @@ type Result {
   data: String
 }
 
+type TeacherType {
+  id: String!
+  createdAt: DateTime!
+  createdBy: String
+  updatedAt: DateTime
+  updatedBy: String
+  deletedAt: DateTime
+  deletedBy: String
+
+  """名称"""
+  name: String!
+
+  """照片"""
+  photoUrl: String
+
+  """教龄"""
+  teacherTime: Float
+
+  """风格标签，以，隔开"""
+  tags: String
+
+  """学历"""
+  education: String
+
+  """资历"""
+  seniority: String
+
+  """职业经验"""
+  experience: String
+
+  """获奖经历"""
+  carryPrize: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type TeacherResult {
+  code: Int!
+  message: String!
+  data: TeacherType
+}
+
+type TeacherResults {
+  code: Int!
+  message: String!
+  data: [TeacherType!]
+  page: Page
+}
+
 type OrderTimeType {
   """开始时间"""
   startTime: String!
@@ -72,11 +124,6 @@ type CourseType {
   """可约时间"""
   reducibleTime: [ReducibleTimeType!]
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type CardType {
   """id"""
@@ -356,6 +403,8 @@ type Query {
   getCards(courseId: String!, name: String): CardResults!
   getProductInfo(id: String!): ProductResult!
   getProducts(page: PageInput!, name: String): ProductResults!
+  getTeacherInfo(id: String!): TeacherResult!
+  getTeachers(page: PageInput!, name: String): TeacherResults!
 }
 
 input PageInput {
@@ -401,6 +450,8 @@ type Mutation {
   deleteCard(id: String!): Result!
   commitProductInfo(params: PartialProductInput!, id: String): ProductResult!
   deleteProduct(id: String!): Result!
+  commitTeacherInfo(params: TeacherInput!, id: String): TeacherResult!
+  deleteTeacher(id: String!): Result!
 }
 
 input UserInput {
@@ -567,4 +618,30 @@ input PartialProductInput {
 
   """消费卡"""
   cards: [String!]
+}
+
+input TeacherInput {
+  """名称"""
+  name: String!
+
+  """照片"""
+  photoUrl: String!
+
+  """教龄"""
+  teacherTime: Float
+
+  """风格标签，以，隔开"""
+  tags: String
+
+  """学历"""
+  education: String
+
+  """资历"""
+  seniority: String
+
+  """职业经验"""
+  experience: String
+
+  """获奖经历"""
+  carryPrize: String
 }

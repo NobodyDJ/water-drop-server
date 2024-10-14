@@ -1,5 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { TeacherModule } from './modules/teacher/teacher.module';
 import { ProductModule } from './modules/product/product.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -40,6 +41,7 @@ import { CardModule } from './modules/card/module-template/card.module';
     CourseModule,
     CardModule,
     ProductModule,
+    TeacherModule,
   ],
   controllers: [AppController],
   providers: [AppService],
