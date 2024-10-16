@@ -4,7 +4,7 @@ import { OrganizationType } from '@/modules/organization/dto/org.type';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 /**
- * 学员
+ * 商品
  */
 @ObjectType()
 export class ProductType extends CommonType {

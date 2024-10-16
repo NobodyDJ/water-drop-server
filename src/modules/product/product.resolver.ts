@@ -11,18 +11,37 @@ import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { SUCCESS } from '@/common/constants/code';
-import { ProductResult, ProductResults } from './dto/result-product.output';
+import {
+  ProductResult,
+  ProductResults,
+  ProductTypeResults,
+} from './dto/result-product.output';
 import { PartialProductInput } from './dto/product.input';
 import { ProductType } from './dto/product.type';
 import { ProductService } from './product.service';
 import { CurUserId } from '@/common/decorators/current-user.decorator';
 import { CurOrgId } from '@/common/decorators/current-org.decorator';
 import { PageInput } from '@/common/dto/page.input';
+import { PRODUCT_TYPES } from '@/common/constants/product-types';
 
 @Resolver(() => ProductType)
 @UseGuards(GqlAuthGuard)
 export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
+
+  /**
+   * 获取商品分类数据
+   * 商品分类数据存在代码中
+   * @returns
+   */
+  @Query(() => ProductTypeResults)
+  async getProductTypes(): Promise<ProductTypeResults> {
+    return {
+      code: SUCCESS,
+      data: PRODUCT_TYPES,
+      message: '获取成功',
+    };
+  }
 
   @Query(() => ProductResult)
   async getProductInfo(@Args('id') id: string): Promise<ProductResult> {

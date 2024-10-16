@@ -253,6 +253,14 @@ type ProductType {
   cards: [CardType!]
 }
 
+type ProductTypeType {
+  """key"""
+  key: String!
+
+  """名称"""
+  title: String!
+}
+
 type ProductResult {
   code: Int!
   message: String!
@@ -263,6 +271,13 @@ type ProductResults {
   code: Int!
   message: String!
   data: [ProductType!]
+  page: Page
+}
+
+type ProductTypeResults {
+  code: Int!
+  message: String!
+  data: [ProductTypeType!]
   page: Page
 }
 
@@ -401,6 +416,7 @@ type Query {
   """根据 ID 查询消费卡信息"""
   getCardInfo(id: String!): CardResult!
   getCards(courseId: String!, name: String): CardResults!
+  getProductTypes: ProductTypeResults!
   getProductInfo(id: String!): ProductResult!
   getProducts(page: PageInput!, name: String): ProductResults!
   getTeacherInfo(id: String!): TeacherResult!
