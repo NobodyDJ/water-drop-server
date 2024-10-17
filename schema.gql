@@ -222,6 +222,9 @@ type ProductType {
   """描述"""
   desc: String
 
+  """状态"""
+  status: String
+
   """库存总数"""
   stock: Float!
 
@@ -613,6 +616,9 @@ input PartialProductInput {
 
   """描述"""
   desc: String
+
+  """状态"""
+  status: String
 
   """库存总数"""
   stock: Float

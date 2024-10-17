@@ -1,3 +1,4 @@
+import { ProductStatus } from '@/common/constants/enmu';
 import { CommonEntity } from '@/common/entities/common.entity';
 import { Card } from '@/modules/card/module-template/models/card.entity';
 import { Organization } from '@/modules/organization/models/org.entity';
@@ -20,6 +21,13 @@ export class Product extends CommonEntity {
     nullable: true,
   })
   desc: string;
+
+  @Column({
+    comment: '商品状态：上架，下架',
+    default: ProductStatus.UN_LIST,
+  })
+  @IsNotEmpty()
+  status: string;
 
   @Column({
     comment: '库存总数',

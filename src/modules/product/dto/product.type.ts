@@ -20,6 +20,12 @@ export class ProductType extends CommonType {
   desc: string;
 
   @Field({
+    description: '状态',
+    nullable: true,
+  })
+  status: string;
+
+  @Field({
     description: '库存总数',
   })
   stock: number;
