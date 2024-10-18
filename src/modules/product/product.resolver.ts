@@ -175,4 +175,35 @@ export class ProductResolver {
       message: '商品信息不存在',
     };
   }
+
+  @Query(() => ProductResults)
+  async getProductsForH5(
+    @Args('page') page: PageInput,
+    @Args('type', { nullable: true }) type?: string,
+    @Args('name', { nullable: true }) name?: string,
+  ): Promise<ProductResults> {
+    const { pageNum, pageSize } = page;
+    const where: FindOptionsWhere<Product> = {};
+    if (name) {
+      where.name = Like(`%${name}%`);
+    }
+    if (type) {
+      where.type = Like(`%${type}%`);
+    }
+    const [results, total] = await this.productService.findProducts({
+      start: (pageNum - 1) * pageSize,
+      length: pageSize,
+      where,
+    });
+    return {
+      code: SUCCESS,
+      data: results,
+      page: {
+        pageNum,
+        pageSize,
+        total,
+      },
+      message: '获取成功',
+    };
+  }
 }

@@ -23,6 +23,12 @@ export class Product extends CommonEntity {
   desc: string;
 
   @Column({
+    comment: '分类',
+    nullable: true,
+  })
+  type: string;
+
+  @Column({
     comment: '商品状态：上架，下架',
     default: ProductStatus.UN_LIST,
   })

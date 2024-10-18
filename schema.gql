@@ -225,6 +225,9 @@ type ProductType {
   """状态"""
   status: String
 
+  """分类"""
+  type: String
+
   """库存总数"""
   stock: Float!
 
@@ -422,6 +425,7 @@ type Query {
   getProductTypes: ProductTypeResults!
   getProductInfo(id: String!): ProductResult!
   getProducts(page: PageInput!, name: String): ProductResults!
+  getProductsForH5(page: PageInput!, type: String, name: String): ProductResults!
   getTeacherInfo(id: String!): TeacherResult!
   getTeachers(page: PageInput!, name: String): TeacherResults!
 }
@@ -619,6 +623,9 @@ input PartialProductInput {
 
   """状态"""
   status: String
+
+  """分类"""
+  type: String
 
   """库存总数"""
   stock: Float

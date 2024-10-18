@@ -20,6 +20,12 @@ export class ProductInput {
   status: string;
 
   @Field({
+    description: '分类',
+    nullable: true,
+  })
+  type: string;
+
+  @Field({
     description: '库存总数',
   })
   stock: number;
