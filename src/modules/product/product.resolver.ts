@@ -218,9 +218,11 @@ export class ProductResolver {
         if (distance < 1000 && distance > 0) {
           // 去除小数点，单位为米
           distanceLabel = `${parseInt(distance.toString(), 10)}`;
-        } else if (distance >= 1000) {
-          distanceLabel = `${parseInt((distance / 1000).toString(), 10)}km`;
-        } else if (distance > 5000) {
+        }
+        if (distance >= 1000) {
+          distanceLabel = `${parseInt((distance / 100).toString(), 10) / 10}km`;
+        }
+        if (distance > 5000) {
           distanceLabel = '>5km';
         }
         return {
