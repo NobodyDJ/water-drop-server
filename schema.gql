@@ -225,6 +225,9 @@ type ProductType {
   """状态"""
   status: String
 
+  """距离"""
+  distance: String
+
   """分类"""
   type: String
 
@@ -425,7 +428,7 @@ type Query {
   getProductTypes: ProductTypeResults!
   getProductInfo(id: String!): ProductResult!
   getProducts(page: PageInput!, name: String): ProductResults!
-  getProductsForH5(page: PageInput!, type: String, name: String): ProductResults!
+  getProductsForH5(page: PageInput!, latitude: Float!, longitude: Float!, type: String, name: String): ProductResults!
   getTeacherInfo(id: String!): TeacherResult!
   getTeachers(page: PageInput!, name: String): TeacherResults!
 }

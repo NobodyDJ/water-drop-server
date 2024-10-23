@@ -26,6 +26,12 @@ export class ProductType extends CommonType {
   status: string;
 
   @Field({
+    description: '距离',
+    nullable: true,
+  })
+  distance?: string;
+
+  @Field({
     description: '分类',
     nullable: true,
   })
