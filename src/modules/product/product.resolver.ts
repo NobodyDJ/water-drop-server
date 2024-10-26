@@ -187,7 +187,6 @@ export class ProductResolver {
     @Args('name', { nullable: true }) name?: string,
   ): Promise<ProductResults> {
     const { pageNum, pageSize } = page;
-    // 筛选出上架的商品
     const where: FindOptionsWhere<Product> = {
       status: ProductStatus.LIST,
     };
@@ -195,11 +194,11 @@ export class ProductResolver {
       where.name = name;
     }
     if (type) {
-      where.type = Like(`%${type}%`);
+      where.type = type;
     }
     const { entities, raw } =
-      await this.productService.findProductOrderByDistance({
-        start: pageNum === 1 ? 0 : (pageNum - 1) * pageSize + 1,
+      await this.productService.findProductsOrderByDistance({
+        start: (pageNum - 1) * pageSize,
         length: pageSize,
         where,
         position: {
@@ -216,8 +215,7 @@ export class ProductResolver {
         const distance = raw[index].distance;
         let distanceLabel = '>5km';
         if (distance < 1000 && distance > 0) {
-          // 去除小数点，单位为米
-          distanceLabel = `${parseInt(distance.toString(), 10)}`;
+          distanceLabel = `${parseInt(distance.toString(), 10)}m`;
         }
         if (distance >= 1000) {
           distanceLabel = `${parseInt((distance / 100).toString(), 10) / 10}km`;

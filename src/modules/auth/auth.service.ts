@@ -3,7 +3,6 @@ import * as $Util from '@alicloud/tea-util';
 import * as $Dysmsapi20170525 from '@alicloud/dysmsapi20170525';
 import { getRandomCode } from '@/shared/utills';
 import { UserService } from '../user/user.service';
-import { SIGN_NAME, TEMPLATE_CODE } from '@/common/constants/aliyun';
 // 形成了单例client
 import { client } from '@/shared/utills/msg';
 import dayjs from 'dayjs';
@@ -34,8 +33,8 @@ export class AuthService {
     const code = getRandomCode();
     // client变量只需要创建一次即可
     const sendSmsRequest = new $Dysmsapi20170525.SendSmsRequest({
-      signName: SIGN_NAME,
-      templateCode: TEMPLATE_CODE,
+      signName: process.env.SIGN_NAME,
+      templateCode: process.env.TEMPLATE_CODE,
       phoneNumbers: tel,
       templateParam: `{"code":${code}}`,
     });

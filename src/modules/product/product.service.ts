@@ -75,7 +75,7 @@ export class ProductService {
     return false;
   }
 
-  async findProductOrderByDistance({
+  async findProductsOrderByDistance({
     start,
     length,
     where,
@@ -94,7 +94,7 @@ export class ProductService {
       .select('product')
       .addSelect(
         `
-        ST_Distance(ST_GeomFromText('POINT(${position.latitude} ${position.longitude})', 4326),
+        ST_Distance(ST_GeomFromText('POINT(${position.latitude} ${position.longitude})', 4326), 
         ST_GeomFromText(CONCAT('POINT(', organization.latitude, ' ', organization.longitude, ')'), 4326))
       `,
         'distance',

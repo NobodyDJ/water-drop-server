@@ -56,6 +56,9 @@ importers:
       dayjs:
         specifier: ^1.11.12
         version: 1.11.13
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       graphql:
         specifier: ^16.9.0
         version: 16.9.0
