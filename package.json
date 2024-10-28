@@ -34,6 +34,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "ali-oss": "^6.21.0",
     "apollo-server-express": "^3.13.0",
+    "axios": "^1.7.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dayjs": "^1.11.12",
@@ -41,12 +42,15 @@
     "graphql": "^16.9.0",
     "md5": "^2.3.0",
     "mysql2": "^3.11.0",
+    "nest-wechatpay-node-v3": "^1.0.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "type-graphql": "2.0.0-rc.2",
-    "typeorm": "0.3.15"
+    "typeorm": "0.3.15",
+    "uuid": "^11.0.1",
+    "wechatpay-node-v3": "^2.2.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

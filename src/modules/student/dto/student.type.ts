@@ -28,4 +28,10 @@ export class StudentType extends CommonType {
     nullable: true,
   })
   avatar: string;
+
+  @Field({
+    description: 'openid',
+    nullable: true,
+  })
+  openid: string;
 }

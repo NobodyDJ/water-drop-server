@@ -346,6 +346,9 @@ type StudentType {
 
   """头像"""
   avatar: String
+
+  """openid"""
+  openid: String
 }
 
 type StudentResult {
