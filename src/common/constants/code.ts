@@ -27,3 +27,4 @@ export const PRODUCT_CREATE_FAIL = 10025;
 export const PRODUCT_DEL_FAIL = 10026;
 export const PRODUCT_NOT_EXIST = 10027;
 export const PRODUCT_UPDATE_FAIL = 10028;
+export const NOT_OPENID = 10029;

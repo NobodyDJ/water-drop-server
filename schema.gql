@@ -403,6 +403,32 @@ type CardResults {
   page: Page
 }
 
+type WxConfig {
+  """公众号ID"""
+  appId: String!
+
+  """时间戳，自1970年以来的秒数"""
+  timeStamp: String!
+
+  """随机串"""
+  nonceStr: String!
+
+  """参数包"""
+  package: String!
+
+  """微信签名方式"""
+  signType: String!
+
+  """微信签名"""
+  paySign: String!
+}
+
+type WxConfigResult {
+  code: Int!
+  message: String!
+  data: WxConfig
+}
+
 type Query {
   """根据 ID 查询用户信息"""
   find(id: String!): UserType!
@@ -482,6 +508,7 @@ type Mutation {
   deleteProduct(id: String!): Result!
   commitTeacherInfo(params: TeacherInput!, id: String): TeacherResult!
   deleteTeacher(id: String!): Result!
+  getWxpayConfig(productId: String!, amount: Float!): WxConfigResult!
 }
 
 input UserInput {
