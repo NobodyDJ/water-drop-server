@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
-import { Organization } from './models/org.entity';
+import { Organization } from './models/organization.entity';
 
 @Injectable()
 export class OrganizationService {

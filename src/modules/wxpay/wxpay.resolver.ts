@@ -13,13 +13,16 @@ import WxPay from 'wechatpay-node-v3';
 import { WECHAT_PAY_MANAGER } from 'nest-wechatpay-node-v3';
 import { v4 as uuidv4 } from 'uuid';
 import { ProductService } from '../product/product.service';
-import { WxConfig } from './dto/wxConfig.type';
+import { WxConfig } from './dto/wx-config.type';
+import { OrderService } from '../order/order.service';
+import { OrderStatus } from '@/common/constants/enmu';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
 export class WxpayResolver {
   constructor(
     private readonly studentService: StudentService,
+    private readonly orderService: OrderService,
     private readonly productService: ProductService, // @Inject(WECHAT_PAY_MANAGER) private wxPay: WxPay,
   ) {}
 
@@ -33,6 +36,7 @@ export class WxpayResolver {
   async getWxpayConfig(
     @CurUserId() userId,
     @Args('productId') productId: string,
+    @Args('quantity') quantity: number,
     @Args('amount') amount: number, // 以分为单位
   ): Promise<WxConfigResult> {
     const student = await this.studentService.findById(userId);
@@ -54,7 +58,7 @@ export class WxpayResolver {
     const params = {
       description: product.name,
       out_trade_no: uuidv4().replace(/-/g, ''),
-      notify_url: '回调url',
+      notify_url: process.env.WXPAY_URL + '/wx/wxpayResult',
       amount: {
         total: amount,
       },
@@ -72,6 +76,21 @@ export class WxpayResolver {
       paySign:
         'oR9d8PuhnIc+YZ8cBHFCwfgpaK9gd7vaRvkYD7rthRAZ/X+QBhcCYL21N7cHCTUxbQ+EAt6Uy+lwSN22f5YZvI45MLko8Pfso0jm46v5hqcVwrk6uddkGuT+Cdvu4WBqDzaDjnNa5UK3GfE1Wfl2gHxIIY5lLdUgWFts17D4WuolLLkiFZV+JSHMvH7eaLdT9N5GBovBwu5yYKUR7skR8Fu+LozcSqQixnlEZUfyE55feLOQTUYzLmR9pNtPbPsu6WVhbNHMS3Ss2+AehHvz+n64GDmXxbX++IOBvm2olHu3PsOUGRwhudhVf7UcGcunXt8cqNjKNqZLhLw4jq/xDg==', // 微信签名
     };
+    await this.orderService.create({
+      tel: student.tel,
+      quantity,
+      amount,
+      product: {
+        id: productId,
+      },
+      org: {
+        id: product.org.id,
+      },
+      student: {
+        id: userId,
+      },
+      status: OrderStatus.USERPAYING,
+    });
     return {
       code: SUCCESS,
       data: result as WxConfig,

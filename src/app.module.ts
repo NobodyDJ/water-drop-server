@@ -1,5 +1,7 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { OrderModule } from './modules/order/order.module';
+import { WxorderModule } from './modules/wxorder/wxorder.module';
 import { TeacherModule } from './modules/teacher/teacher.module';
 import { ProductModule } from './modules/product/product.module';
 import { AppController } from './app.controller';
@@ -10,7 +12,7 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { OSSModule } from './modules/oss/oss.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { StudentModule } from './modules/student/student.module';
-import { OrganizationModule } from './modules/organization/org.module';
+import { OrganizationModule } from './modules/organization/organization.module';
 import { CourseModule } from './modules/course/course.module';
 import { CardModule } from './modules/card/module-template/card.module';
 import { WxpayModule } from './modules/wxpay/wxpay.module';
@@ -44,6 +46,8 @@ import { WxpayModule } from './modules/wxpay/wxpay.module';
     ProductModule,
     TeacherModule,
     WxpayModule,
+    WxorderModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

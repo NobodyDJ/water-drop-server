@@ -2,7 +2,7 @@ import { CommonEntity } from '@/common/entities/common.entity';
 import { IsInt, IsNotEmpty, Min } from 'class-validator';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { ReducibleTimeType } from '../dto/common.type';
-import { Organization } from '@/modules/organization/models/org.entity';
+import { Organization } from '@/modules/organization/models/organization.entity';
 import { Card } from '@/modules/card/module-template/models/card.entity';
 
 /**

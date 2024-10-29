@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { OrganizationService } from './org.service';
+import { OrganizationService } from './organization.service';
 import { GqlAuthGuard } from '@/common/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
 import {
@@ -8,17 +8,17 @@ import {
   ORG_NOT_EXIST,
   SUCCESS,
 } from '@/common/constants/code';
-import { OrganizationInput } from './dto/org.input';
+import { OrganizationInput } from './dto/organization.input';
 import { CurUserId } from '@/common/decorators/current-user.decorator';
 import {
   OrganizationResult,
   OrganizationResults,
-} from './dto/result-org.output';
+} from './dto/result-organization.output';
 import { PageInput } from '@/common/dto/page.input';
 import { OrgImageService } from '../orgImage/orgImage.service';
 import { Result } from '@/common/dto/result.type';
 import { FindOptionsWhere, Like } from 'typeorm';
-import { Organization } from './models/org.entity';
+import { Organization } from './models/organization.entity';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)

@@ -1,4 +1,4 @@
-import { Organization } from '@/modules/organization/models/org.entity';
+import { Organization } from '@/modules/organization/models/organization.entity';
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { CommonEntity } from '@/common/entities/common.entity';
 

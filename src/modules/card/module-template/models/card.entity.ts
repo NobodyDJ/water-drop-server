@@ -1,4 +1,4 @@
-import { Organization } from '@/modules/organization/models/org.entity';
+import { Organization } from '@/modules/organization/models/organization.entity';
 import { CommonEntity } from '@/common/entities/common.entity';
 import { Course } from '@/modules/course/models/course.entity';
 import { IsNotEmpty } from 'class-validator';

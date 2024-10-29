@@ -1,4 +1,4 @@
-import { Organization } from '@/modules/organization/models/org.entity';
+import { Organization } from '@/modules/organization/models/organization.entity';
 import { IsNotEmpty } from 'class-validator';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
