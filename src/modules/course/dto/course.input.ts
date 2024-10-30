@@ -25,6 +25,11 @@ export class CourseInput {
   baseAbility: string;
 
   @Field({
+    description: '封面图',
+  })
+  coverUrl: string;
+
+  @Field({
     description: '限制上课人数',
   })
   limitNumber: number;
@@ -57,6 +62,12 @@ export class CourseInput {
     nullable: true,
   })
   reducibleTime: ReducibleTimeInput[];
+
+  @Field(() => [String], {
+    description: '任课老师',
+    nullable: true,
+  })
+  teachers: string[];
 }
 
 @InputType()

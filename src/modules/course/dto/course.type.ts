@@ -1,6 +1,7 @@
 import { CommonType } from '@/common/dto/common.type';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ReducibleTimeType } from './common.type';
+import { TeacherType } from '@/modules/teacher/dto/teacher.type';
 
 /**
  * 学员
@@ -22,6 +23,12 @@ export class CourseType extends CommonType {
     description: '适龄人群',
   })
   group: string;
+
+  @Field({
+    description: '封面图',
+    nullable: true,
+  })
+  coverUrl: string;
 
   @Field({
     description: '适合基础',
@@ -61,4 +68,10 @@ export class CourseType extends CommonType {
     nullable: true,
   })
   reducibleTime: ReducibleTimeType[];
+
+  @Field(() => [TeacherType], {
+    description: '任课老师',
+    nullable: true,
+  })
+  teachers: TeacherType[];
 }

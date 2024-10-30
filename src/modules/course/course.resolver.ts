@@ -14,7 +14,7 @@ import { CurUserId } from '@/common/decorators/current-user.decorator';
 import { CourseResult, CourseResults } from './dto/result-course.output';
 import { PageInput } from '@/common/dto/page.input';
 import { Result } from '@/common/dto/result.type';
-import { FindOptionsWhere, Like } from 'typeorm';
+import { DeepPartial, FindOptionsWhere, Like } from 'typeorm';
 import { Course } from './models/course.entity';
 import { CurOrgId } from '@/common/decorators/current-org.decorator';
 
@@ -50,6 +50,7 @@ export class CourseResolver {
     if (!id) {
       const res = await this.courseService.create({
         ...params,
+        teachers: params.teachers.map((item) => ({ id: item })),
         createdBy: userId,
         org: {
           id: orgId,
@@ -66,16 +67,31 @@ export class CourseResolver {
         message: '创建失败',
       };
     }
-    const res = await this.courseService.updateById(id, params);
-    if (res) {
+    const course = await this.courseService.findById(id);
+    if (course) {
+      const courseInput: DeepPartial<Course> = {
+        ...params,
+        updatedBy: userId,
+        teachers: course.teachers,
+      };
+      if (params.teachers) {
+        courseInput.teachers = params.teachers.map((item) => ({ id: item }));
+      }
+      const res = await this.courseService.updateById(course.id, courseInput);
+      if (res) {
+        return {
+          code: SUCCESS,
+          message: '更新成功',
+        };
+      }
       return {
-        code: SUCCESS,
-        message: '更新成功',
+        code: COURSE_UPDATE_FAIL,
+        message: '更新失败',
       };
     }
     return {
-      code: COURSE_UPDATE_FAIL,
-      message: '更新失败',
+      code: COURSE_NOT_EXIST,
+      message: '课程信息不存在',
     };
   }
 
