@@ -36,7 +36,17 @@ export class WxpayController {
    */
   @Post('wxpayResult')
   async wxpayResult(@Body() data: IWxpayResult) {
-    const result: WxorderType = this.wxPay.decipher_gcm(
+    const result: WxorderType & {
+      payer: {
+        openid: string;
+      };
+      amount: {
+        total: number;
+        payer_total: number;
+        currency: string;
+        payer_currency: string;
+      };
+    } = this.wxPay.decipher_gcm(
       data.resource.ciphertext,
       data.resource.associated_data,
       data.resource.nonce,
@@ -49,7 +59,14 @@ export class WxpayController {
         result.transaction_id,
       );
       if (!wxOrder) {
-        wxOrder = await this.wxorderService.create(result);
+        wxOrder = await this.wxorderService.create({
+          ...result,
+          ...result.payer,
+          ...result.amount,
+          org: {
+            id: order.org.id,
+          },
+        });
       }
       if (wxOrder) {
         await this.orderService.updateById(order.id, {

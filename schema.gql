@@ -636,6 +636,7 @@ type Mutation {
   commitTeacherInfo(params: TeacherInput!, id: String): TeacherResult!
   deleteTeacher(id: String!): Result!
   getWxpayConfig(productId: String!, quantity: Float!, amount: Float!): WxConfigResult!
+  mockOrderGenerator(productId: String!, quantity: Float!, amount: Float!): Result!
   deleteOrder(id: String!): Result!
   deleteWxorder(id: String!): Result!
 }
