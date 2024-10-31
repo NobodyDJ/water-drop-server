@@ -1,5 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { CardRecordModule } from './modules/cardRecord/card-record.module';
 import { OrderModule } from './modules/order/order.module';
 import { WxorderModule } from './modules/wxorder/wxorder.module';
 import { TeacherModule } from './modules/teacher/teacher.module';
@@ -14,7 +15,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { StudentModule } from './modules/student/student.module';
 import { OrganizationModule } from './modules/organization/organization.module';
 import { CourseModule } from './modules/course/course.module';
-import { CardModule } from './modules/card/module-template/card.module';
+import { CardModule } from './modules/card/card.module';
 import { WxpayModule } from './modules/wxpay/wxpay.module';
 
 @Module({
@@ -48,6 +49,7 @@ import { WxpayModule } from './modules/wxpay/wxpay.module';
     WxpayModule,
     WxorderModule,
     OrderModule,
+    CardRecordModule,
   ],
   controllers: [AppController],
   providers: [AppService],

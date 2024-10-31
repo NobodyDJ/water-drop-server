@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { ReducibleTimeType } from '../dto/common.type';
 import { Organization } from '@/modules/organization/models/organization.entity';
-import { Card } from '@/modules/card/module-template/models/card.entity';
+import { Card } from '@/modules/card/models/card.entity';
 import { Teacher } from '@/modules/teacher/models/teacher.entity';
 
 /**

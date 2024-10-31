@@ -17,11 +17,13 @@ import { WxConfig } from './dto/wx-config.type';
 import { OrderService } from '../order/order.service';
 import { OrderStatus } from '@/common/constants/enmu';
 import { Result } from '@/common/dto/result.type';
+import { CardRecordService } from '../cardRecord/card-record.service';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
 export class WxpayResolver {
   constructor(
+    private readonly cardRecordService: CardRecordService,
     private readonly studentService: StudentService,
     private readonly orderService: OrderService,
     private readonly productService: ProductService,
@@ -140,6 +142,10 @@ export class WxpayResolver {
         },
       },
     });
+    await this.cardRecordService.addCardForStudent(
+      userId,
+      product.cards.map((item) => item.id),
+    );
     return {
       code: SUCCESS,
       message: '创建成功',

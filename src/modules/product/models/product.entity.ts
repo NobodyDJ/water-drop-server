@@ -1,6 +1,6 @@
 import { ProductStatus } from '@/common/constants/enmu';
 import { CommonEntity } from '@/common/entities/common.entity';
-import { Card } from '@/modules/card/module-template/models/card.entity';
+import { Card } from '@/modules/card/models/card.entity';
 import { Organization } from '@/modules/organization/models/organization.entity';
 import { IsNotEmpty, Min } from 'class-validator';
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';

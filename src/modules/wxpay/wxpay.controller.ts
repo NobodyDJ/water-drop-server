@@ -16,6 +16,8 @@ import { OrderStatus } from '@/common/constants/enmu';
 import { OrderService } from '../order/order.service';
 import { WxorderService } from '../wxorder/wxorder.service';
 import { WxorderType } from '../wxorder/dto/wxorder.type';
+import { ProductService } from '../product/product.service';
+import { CardRecordService } from '../cardRecord/card-record.service';
 
 /**
  * www.sss.com/wx/wxpay
@@ -24,6 +26,8 @@ import { WxorderType } from '../wxorder/dto/wxorder.type';
 export class WxpayController {
   constructor(
     private readonly studentService: StudentService,
+    private readonly productService: ProductService,
+    private readonly cardRecordService: CardRecordService,
     private readonly wxorderService: WxorderService,
     private readonly orderService: OrderService,
     @Inject(WECHAT_PAY_MANAGER) private wxPay: WxPay,
@@ -69,11 +73,19 @@ export class WxpayController {
         });
       }
       if (wxOrder) {
-        await this.orderService.updateById(order.id, {
-          status: result.trade_state,
-          // 关联的微信支付信息
-          wxOrder: wxOrder,
-        });
+        const product = await this.productService.findById(order.product.id);
+        // 给当前用户添加消费卡，消费卡来自于当前商品
+        const res = await this.cardRecordService.addCardForStudent(
+          order.student.id,
+          product.cards.map((item) => item.id),
+        );
+        if (res) {
+          await this.orderService.updateById(order.id, {
+            status: result.trade_state,
+            // 关联的微信支付信息
+            wxOrder: wxOrder,
+          });
+        }
       }
     }
     return {

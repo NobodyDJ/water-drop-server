@@ -7,6 +7,7 @@ import { OrderModule } from '../order/order.module';
 import { WxorderModule } from '../wxorder/wxorder.module';
 import * as fs from 'fs';
 import { WeChatPayModule } from 'nest-wechatpay-node-v3';
+import { CardRecordModule } from '../cardRecord/card-record.module';
 
 @Module({
   controllers: [WxpayController],
@@ -16,6 +17,7 @@ import { WeChatPayModule } from 'nest-wechatpay-node-v3';
     ProductModule,
     OrderModule,
     WxorderModule,
+    CardRecordModule,
     WeChatPayModule.registerAsync({
       useFactory: async () => {
         return {
