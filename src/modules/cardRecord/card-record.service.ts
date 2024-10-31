@@ -95,6 +95,7 @@ export class CardRecordService {
       order: {
         createdAt: 'DESC',
       },
+      relations: ['org', 'card'],
     });
   }
 

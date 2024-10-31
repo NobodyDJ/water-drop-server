@@ -29,7 +29,7 @@ export class CardService {
         id,
       },
       // 关联表查询需要添加relations字段，值为数组值为相关的外键
-      relations: ['course'],
+      relations: ['course', 'org'],
     });
   }
 

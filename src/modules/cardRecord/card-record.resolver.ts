@@ -58,7 +58,6 @@ export class CardRecordResolver {
       length: pageSize,
       where,
     });
-
     const newRes = results.map((c) => {
       let status = CARD_STATUS.VALID;
       // 过期了
@@ -75,7 +74,14 @@ export class CardRecordResolver {
         status,
       };
     });
-
+    newRes.sort((a, b) => {
+      const comparison = b.status.localeCompare(a.status);
+      if (comparison === 0) {
+        return dayjs(a.buyTime).isBefore(b.buyTime) ? 1 : -1;
+      } else {
+        return comparison;
+      }
+    });
     return {
       code: SUCCESS,
       data: newRes,
