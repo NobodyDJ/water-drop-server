@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-class OrderTimeType {
+export class OrderTimeType {
   @Field({
     description: '开始时间',
   })

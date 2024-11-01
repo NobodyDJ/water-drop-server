@@ -1,5 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from './modules/schedule/schedule.module';
 import { CardRecordModule } from './modules/cardRecord/card-record.module';
 import { OrderModule } from './modules/order/order.module';
 import { WxorderModule } from './modules/wxorder/wxorder.module';
@@ -50,6 +51,7 @@ import { WxpayModule } from './modules/wxpay/wxpay.module';
     WxorderModule,
     OrderModule,
     CardRecordModule,
+    ScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

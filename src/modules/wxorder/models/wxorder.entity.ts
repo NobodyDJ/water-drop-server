@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 import { CommonEntity } from '@/common/entities/common.entity';
 import { Organization } from '@/modules/organization/models/organization.entity';
+import { Order } from '@/modules/order/models/order.entity';
 
 /**
  * 微信订单信息
@@ -97,4 +98,7 @@ export class Wxorder extends CommonEntity {
 
   @ManyToOne(() => Organization, { cascade: true })
   org?: Organization;
+
+  @OneToOne(() => Order, (order) => order.wxOrder)
+  order?: Order;
 }

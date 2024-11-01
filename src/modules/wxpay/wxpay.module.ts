@@ -5,7 +5,7 @@ import { WxpayResolver } from './wxpay.resolver';
 import { ProductModule } from '../product/product.module';
 import { OrderModule } from '../order/order.module';
 import { WxorderModule } from '../wxorder/wxorder.module';
-import * as fs from 'fs';
+import fs from 'fs';
 import { WeChatPayModule } from 'nest-wechatpay-node-v3';
 import { CardRecordModule } from '../cardRecord/card-record.module';
 
