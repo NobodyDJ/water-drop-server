@@ -174,6 +174,9 @@ type OrganizationType {
 
   """其他图"""
   orgOtherImg: [OrgImageType!]
+
+  """门店的课程"""
+  courses: [CourseType!]
 }
 
 type ScheduleType {
@@ -215,6 +218,19 @@ type ScheduleResults {
   code: Int!
   message: String!
   data: [ScheduleType!]
+  page: Page
+}
+
+type OrganizationResult {
+  code: Int!
+  message: String!
+  data: OrganizationType
+}
+
+type OrganizationResults {
+  code: Int!
+  message: String!
+  data: [OrganizationType!]
   page: Page
 }
 
@@ -606,19 +622,6 @@ type OSSType {
   dir: String!
 }
 
-type OrganizationResult {
-  code: Int!
-  message: String!
-  data: OrganizationType
-}
-
-type OrganizationResults {
-  code: Int!
-  message: String!
-  data: [OrganizationType!]
-  page: Page
-}
-
 type WxConfig {
   """公众号ID"""
   appId: String!
@@ -688,6 +691,9 @@ type Query {
   getCardRecords(page: PageInput!): CardRecordResults!
   getScheduleInfo(id: String!): ScheduleResult!
   getSchedules(today: String!): ScheduleResults!
+
+  """获得当前学员可以约的课程"""
+  getCanSubscribeResults: OrganizationResults!
 }
 
 input PageInput {

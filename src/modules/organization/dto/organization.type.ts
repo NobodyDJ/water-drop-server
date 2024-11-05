@@ -1,4 +1,5 @@
 import { CommonType } from '@/common/dto/common.type';
+import { CourseType } from '@/modules/course/dto/course.type';
 import { OrgImageType } from '@/modules/orgImage/dto/orgImage.output';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
@@ -83,4 +84,7 @@ export class OrganizationType extends CommonType {
 
   @Field(() => [OrgImageType], { nullable: true, description: '其他图' })
   orgOtherImg?: OrgImageType[];
+
+  @Field(() => [CourseType], { nullable: true, description: '门店的课程' })
+  courses?: CourseType[];
 }

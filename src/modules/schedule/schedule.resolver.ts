@@ -1,6 +1,7 @@
 import { FindOptionsWhere } from 'typeorm';
 import { Schedule } from './models/schedule.entity';
 import {
+  CARD_RECORD_EXIST,
   COURSE_CREATE_FAIL,
   COURSE_DEL_FAIL,
   COURSE_NOT_EXIST,
@@ -21,6 +22,10 @@ import { CurOrgId } from '@/common/decorators/current-org.decorator';
 import { CourseService } from '../course/course.service';
 import { OrderTimeType } from '../course/dto/common.type';
 import dayjs from 'dayjs';
+import { OrganizationResults } from '../organization/dto/result-organization.output';
+import { CardRecordService } from '../cardRecord/card-record.service';
+import _ from 'lodash';
+import { OrganizationType } from '../organization/dto/organization.type';
 
 @Resolver(() => ScheduleType)
 @UseGuards(GqlAuthGuard)
@@ -28,6 +33,7 @@ export class ScheduleResolver {
   constructor(
     private readonly scheduleService: ScheduleService,
     private readonly courseService: CourseService,
+    private readonly cardRecordRepository: CardRecordService,
   ) {}
 
   @Query(() => ScheduleResult)
@@ -218,6 +224,49 @@ export class ScheduleResolver {
     return {
       code: COURSE_NOT_EXIST,
       message: '门店信息不存在',
+    };
+  }
+  /**
+   * 获取当前学员可以约的课程，需要根据门店进行分类，一个门店对应多个课程
+   */
+  @Query(() => OrganizationResults, {
+    description: '获得当前学员可以约的课程',
+  })
+  async getCanSubscribeResults(
+    @CurUserId() userId: string,
+  ): Promise<OrganizationResults> {
+    const cards = await this.cardRecordRepository.findValidCards(userId);
+    if (!cards || cards.length === 0) {
+      return {
+        code: CARD_RECORD_EXIST,
+        message: '没有可用的消费卡，快去购买吧',
+      };
+    }
+    // 2 获取消费卡可以约的课
+    const courses = cards.map((item) => item.course);
+    // 3 去除重复的课程
+    const cs = _.uniqBy(courses, 'id');
+    // 4 对课程做分组，按照门店，一个门店id映射多个课程的哈希表数据结构
+    const orgObj: Record<string, OrganizationType> = {};
+    for (let i = 0; i < cs.length; i++) {
+      const c = cs[i];
+      if (orgObj[c.org.id]) {
+        orgObj[c.org.id].courses.push(c);
+      } else {
+        orgObj[c.org.id] = {
+          ...c.org,
+          courses: [c],
+        };
+      }
+    }
+    const orgs: OrganizationType[] = Object.values(orgObj);
+    return {
+      code: SUCCESS,
+      message: '获取成功',
+      data: orgs,
+      page: {
+        total: orgs.length,
+      },
     };
   }
 }
