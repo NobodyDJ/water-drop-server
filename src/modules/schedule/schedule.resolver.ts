@@ -17,7 +17,6 @@ import { ScheduleInput } from './dto/schedule.input';
 import { ScheduleType } from './dto/schedule.type';
 import { ScheduleService } from './schedule.service';
 import { CurUserId } from '@/common/decorators/current-user.decorator';
-import { PageInput } from '@/common/dto/page.input';
 import { CurOrgId } from '@/common/decorators/current-org.decorator';
 import { CourseService } from '../course/course.service';
 import { OrderTimeType } from '../course/dto/common.type';
@@ -50,35 +49,40 @@ export class ScheduleResolver {
   /**
    *  开始排课
    */
+  @Mutation(() => Result, { description: '开始排课' })
   async autoCreateSchedule(
     @Args('startDay') startDay: string,
     @Args('endDay') endDay: string,
     @CurUserId() userId: string,
     @CurOrgId() orgId: string,
   ): Promise<Result> {
+    // 1 获取到当前门店下的所有课程
     const [courses] = await this.courseService.findCourses({
-      start: 1,
-      length: 100,
       where: {
         org: {
           id: orgId,
         },
       },
+      start: 0,
+      length: 100,
     });
     const schedules = [];
+    // 2 循环课程，并拿到每个课程的可约时间
     for (const course of courses) {
+      // {"week":"monday","orderTime":[{"key":7, "startTime":"", "endTime":""}]}]
       const reducibleTime = course.reducibleTime;
       const newReducibleTime: Record<string, OrderTimeType[]> = {};
       for (const rt of reducibleTime) {
         newReducibleTime[rt.week] = rt.orderTime;
       }
       let curDay = dayjs(startDay);
-      while (curDay.isBefore(dayjs(endDay))) {
-        const curWeek = curDay.format('dddd').toLocaleLowerCase(); // 获取星期几，英文全称
+      // 3 从开始的日期到结束的日期，判断是周几，然后就用周几的排课规则（可约时间）
+      while (curDay.isBefore(dayjs(endDay).add(1, 'd'))) {
+        const curWeek = curDay.format('dddd').toLocaleLowerCase();
         const orderTime = newReducibleTime[curWeek];
         if (orderTime && orderTime.length > 0) {
           for (const ot of orderTime) {
-            // 解决重复排课的问题，先确定排课是否存在
+            // 解决重复排课的问题
             const [oldSchedule] = await this.scheduleService.findSchedules({
               where: {
                 org: {
@@ -95,8 +99,7 @@ export class ScheduleResolver {
               length: 10,
             });
             if (oldSchedule.length === 0) {
-              // 将课程时间段加入
-              const schedule = new Schedule(); // 实例化
+              const schedule = new Schedule();
               schedule.startTime = ot.startTime;
               schedule.endTime = ot.endTime;
               schedule.limitNumber = course.limitNumber;
@@ -105,7 +108,7 @@ export class ScheduleResolver {
               schedule.schoolDay = curDay.toDate();
               schedule.createdBy = userId;
               // 创建课程表实例
-              const si = await this.scheduleService.createInstance(schedule); // 创建实例存入表中
+              const si = await this.scheduleService.createInstance(schedule);
               schedules.push(si);
             }
           }
@@ -176,23 +179,17 @@ export class ScheduleResolver {
   }
 
   @Query(() => ScheduleResults)
-  async getSchedules(
-    @Args('page') page: PageInput,
-    @CurUserId() userId: string,
-  ): Promise<ScheduleResults> {
-    const { pageNum, pageSize } = page;
-    const where: FindOptionsWhere<Schedule> = { createdBy: userId };
-    const [results, total] = await this.scheduleService.findSchedules({
-      start: (pageNum - 1) * pageSize,
-      length: pageSize,
+  async getSchedules(@Args('today') today: string): Promise<ScheduleResults> {
+    const where: FindOptionsWhere<Schedule> = {
+      schoolDay: dayjs(today).toDate(),
+    };
+    const [results, total] = await this.scheduleService.findAllSchedules({
       where,
     });
     return {
       code: SUCCESS,
       data: results,
       page: {
-        pageNum,
-        pageSize,
         total,
       },
       message: '获取成功',

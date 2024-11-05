@@ -43,6 +43,21 @@ export class ScheduleService {
     return false;
   }
 
+  // 获取所有的课程表
+  async findAllSchedules({
+    where,
+  }: {
+    where: FindOptionsWhere<Schedule>;
+  }): Promise<[Schedule[], number]> {
+    return this.scheduleRepository.findAndCount({
+      where,
+      order: {
+        startTime: 'ASC',
+      },
+      relations: ['course', 'course.teachers'],
+    });
+  }
+
   async findSchedules({
     start,
     length,
