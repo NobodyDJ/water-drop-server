@@ -1,6 +1,7 @@
 import { CommonEntity } from '@/common/entities/common.entity';
 import { Course } from '@/modules/course/models/course.entity';
 import { Organization } from '@/modules/organization/models/organization.entity';
+import { Teacher } from '@/modules/teacher/models/teacher.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 
 /**
@@ -42,4 +43,9 @@ export class Schedule extends CommonEntity {
     cascade: true,
   })
   course: Course;
+
+  @ManyToOne(() => Teacher, {
+    cascade: true,
+  })
+  teacher?: Teacher;
 }

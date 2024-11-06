@@ -113,6 +113,7 @@ export class ScheduleResolver {
               schedule.course = course;
               schedule.schoolDay = curDay.toDate();
               schedule.createdBy = userId;
+              schedule.teacher = course.teachers[0];
               // 创建课程表实例
               const si = await this.scheduleService.createInstance(schedule);
               schedules.push(si);
@@ -232,7 +233,7 @@ export class ScheduleResolver {
   @Query(() => OrganizationResults, {
     description: '获得当前学员可以约的课程',
   })
-  async getCanSubscribeResults(
+  async getCanSubscribeCourses(
     @CurUserId() userId: string,
   ): Promise<OrganizationResults> {
     const cards = await this.cardRecordRepository.findValidCards(userId);

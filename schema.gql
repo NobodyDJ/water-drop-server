@@ -693,7 +693,7 @@ type Query {
   getSchedules(today: String!): ScheduleResults!
 
   """获得当前学员可以约的课程"""
-  getCanSubscribeResults: OrganizationResults!
+  getCanSubscribeCourses: OrganizationResults!
 }
 
 input PageInput {
