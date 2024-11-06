@@ -143,4 +143,33 @@ export class CardRecordService {
     });
     return data;
   }
+
+  async findUseCards(
+    studentId: string,
+    courseId: string,
+  ): Promise<[CardRecord[], number]> {
+    const [cards] = await this.cardRecordRepository.findAndCount({
+      where: {
+        student: {
+          id: studentId,
+        },
+        course: {
+          id: courseId,
+        },
+      },
+      relations: ['card'],
+    });
+    const newCards = [];
+    cards.forEach((card) => {
+      if (!dayjs().isAfter(card.endTime)) {
+        if (card.card.type === CardType.DURATION) {
+          newCards.push(card);
+        }
+        if (card.card.type === CardType.TIME && card.residueTime > 0) {
+          newCards.push(card);
+        }
+      }
+    });
+    return [newCards, newCards.length];
+  }
 }

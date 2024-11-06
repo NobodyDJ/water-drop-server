@@ -142,4 +142,25 @@ export class CardRecordResolver {
       message: '消费卡信息不存在',
     };
   }
+
+  @Query(() => CardRecordResults, {
+    description: '获取当前学员在某个课程上可以用的消费卡',
+  })
+  async getUseCardRecordsByCourse(
+    @Args('courseId') courseId: string,
+    @CurUserId() userId: string,
+  ): Promise<CardRecordResults> {
+    const [cards, total] = await this.cardRecordService.findUseCards(
+      userId,
+      courseId,
+    );
+    return {
+      code: SUCCESS,
+      message: '获取成功',
+      data: cards,
+      page: {
+        total,
+      },
+    };
+  }
 }

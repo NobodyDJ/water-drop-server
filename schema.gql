@@ -689,11 +689,17 @@ type Query {
   """获取个人的消费卡"""
   getCardRecordsForH5(page: PageInput!): CardRecordResults!
   getCardRecords(page: PageInput!): CardRecordResults!
+
+  """获取当前学员在某个课程上可以用的消费卡"""
+  getUseCardRecordsByCourse(courseId: String!): CardRecordResults!
   getScheduleInfo(id: String!): ScheduleResult!
   getSchedules(today: String!): ScheduleResults!
 
   """获得当前学员可以约的课程"""
   getCanSubscribeCourses: OrganizationResults!
+
+  """获取某一个课程的近七天的课程表"""
+  getScheduleByCourse(courseId: String!): ScheduleResult!
 }
 
 input PageInput {

@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository, FindOptionsWhere } from 'typeorm';
+import { DeepPartial, Repository, FindOptionsWhere, Between } from 'typeorm';
 import { Schedule } from './models/schedule.entity';
+import dayjs from 'dayjs';
 @Injectable()
 export class ScheduleService {
   constructor(
@@ -101,5 +102,27 @@ export class ScheduleService {
       return true;
     }
     return false;
+  }
+
+  // 获取未来有效的，7天内的课程表
+  async findValidSchedulesForNext7Days(
+    courseId: string,
+  ): Promise<[Schedule[], number]> {
+    const res = await this.scheduleRepository.findAndCount({
+      where: {
+        course: {
+          id: courseId,
+        },
+        schoolDay: Between(
+          dayjs().endOf('day').toDate(),
+          dayjs().add(7, 'day').toDate(),
+        ),
+      },
+      order: {
+        schoolDay: 'ASC',
+        startTime: 'ASC',
+      },
+    });
+    return res;
   }
 }
