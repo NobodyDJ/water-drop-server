@@ -1,12 +1,18 @@
 import { FindOptionsWhere } from 'typeorm';
 import { Schedule } from './models/schedule.entity';
 import {
+  CARD_DEPLETE,
+  CARD_EXPIRED,
+  CARD_NOT_EXIST,
   CARD_RECORD_EXIST,
   COURSE_CREATE_FAIL,
   COURSE_DEL_FAIL,
   COURSE_NOT_EXIST,
   COURSE_UPDATE_FAIL,
   SCHEDULE_CREATE_FAIL,
+  SCHEDULE_HAD_SUBSCRIBE,
+  SCHEDULE_NOT_EXIST,
+  SUBSCRIBE_FAIL,
 } from './../../common/constants/code';
 import { Result } from '@/common/dto/result.type';
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
@@ -26,6 +32,8 @@ import { OrganizationResults } from '../organization/dto/result-organization.out
 import { CardRecordService } from '../cardRecord/card-record.service';
 import _ from 'lodash';
 import { OrganizationType } from '../organization/dto/organization.type';
+import { CardType } from '@/common/constants/enmu';
+import { ScheduleRecordService } from '../schedule-record/schedule-record.service';
 
 @Resolver(() => ScheduleType)
 @UseGuards(GqlAuthGuard)
@@ -33,7 +41,8 @@ export class ScheduleResolver {
   constructor(
     private readonly scheduleService: ScheduleService,
     private readonly courseService: CourseService,
-    private readonly cardRecordRepository: CardRecordService,
+    private readonly cardRecordService: CardRecordService,
+    private readonly scheduleRecordService: ScheduleRecordService,
   ) {}
 
   @Query(() => ScheduleResult)
@@ -245,7 +254,7 @@ export class ScheduleResolver {
   async getCanSubscribeCourses(
     @CurUserId() userId: string,
   ): Promise<OrganizationResults> {
-    const cards = await this.cardRecordRepository.findValidCards(userId);
+    const cards = await this.cardRecordService.findValidCards(userId);
     if (!cards || cards.length === 0) {
       return {
         code: CARD_RECORD_EXIST,
@@ -280,10 +289,10 @@ export class ScheduleResolver {
     };
   }
   // 获取近7天的课程表
-  @Query(() => ScheduleResult, {
+  @Query(() => ScheduleResults, {
     description: '获取某一个课程的近七天的课程表',
   })
-  async getScheduleByCourse(
+  async getSchedulesByCourse(
     @Args('courseId') courseId: string,
   ): Promise<ScheduleResults> {
     const [entities, count] =
@@ -295,6 +304,107 @@ export class ScheduleResolver {
       page: {
         total: count,
       },
+    };
+  }
+
+  // 确认预约课程
+  @Mutation(() => Result, {
+    description: '确认预约课程',
+  })
+  async subscribeCourse(
+    @Args('scheduleId') scheduleId: string,
+    @Args('cardId') cardId: string,
+    @CurUserId() userId: string,
+  ) {
+    // 第一步：校验
+    const myCard = await this.cardRecordService.findById(cardId);
+    if (!myCard) {
+      return {
+        code: CARD_NOT_EXIST,
+        message: '消费卡不存在',
+      };
+    }
+    // 判断消费卡是否过期
+    if (dayjs().isAfter(myCard.endTime)) {
+      return {
+        code: CARD_EXPIRED,
+        message: '消费卡已经过期',
+      };
+    }
+    // 判断消费卡是否耗尽
+    if (myCard.card.type === CardType.TIME && myCard.residueTime === 0) {
+      return {
+        code: CARD_DEPLETE,
+        message: '消费卡次数已经耗尽了',
+      };
+    }
+    const schedule = await this.scheduleService.findById(scheduleId);
+    // 校验是否存在课程
+    if (!schedule) {
+      return {
+        code: SCHEDULE_NOT_EXIST,
+        message: '当前课程表不存在',
+      };
+    }
+
+    // 判断课程是否重复预约
+    const isHadSubscribe = await this.scheduleRecordService.isHadSubscribe(
+      scheduleId,
+      userId,
+    );
+    if (isHadSubscribe) {
+      return {
+        code: SCHEDULE_HAD_SUBSCRIBE,
+        message: '不要重复预约同一时间段',
+      };
+    }
+
+    // 第二步：创建预约记录
+    const scheduleRecordId = await this.scheduleRecordService.create({
+      subscribeTime: new Date(),
+      student: {
+        id: userId,
+      },
+      schedule: {
+        id: scheduleId,
+      },
+      cardRecord: {
+        id: cardId,
+      },
+      course: {
+        id: schedule.course.id,
+      },
+      org: {
+        id: schedule.org.id,
+      },
+    });
+
+    if (!scheduleRecordId) {
+      return {
+        code: SUBSCRIBE_FAIL,
+        message: '预约失败',
+      };
+    }
+    if (myCard.card.type === CardType.TIME) {
+      const res = await this.cardRecordService.updateById(cardId, {
+        residueTime: myCard.residueTime - 1,
+      });
+      if (res) {
+        return {
+          code: SUCCESS,
+          message: '预约成功',
+        };
+      } else {
+        await this.scheduleRecordService.deleteById(cardId, userId);
+        return {
+          code: SUBSCRIBE_FAIL,
+          message: '预约失败',
+        };
+      }
+    }
+    return {
+      code: SUCCESS,
+      message: '预约成功',
     };
   }
 }
