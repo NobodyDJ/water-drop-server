@@ -231,6 +231,9 @@ type ScheduleType {
 
   """机构信息"""
   org: OrganizationType
+
+  """老师"""
+  teacher: TeacherType
 }
 
 type ScheduleRecordType {
@@ -239,6 +242,9 @@ type ScheduleRecordType {
 
   """预约时间"""
   subscribeTime: DateTime
+
+  """状态"""
+  status: String
 
   """学员"""
   student: StudentType
@@ -263,45 +269,6 @@ type ScheduleRecordResults {
   code: Int!
   message: String!
   data: [ScheduleRecordType!]
-  page: Page
-}
-
-type ScheduleResult {
-  code: Int!
-  message: String!
-  data: ScheduleType
-}
-
-type ScheduleResults {
-  code: Int!
-  message: String!
-  data: [ScheduleType!]
-  page: Page
-}
-
-type OrganizationResult {
-  code: Int!
-  message: String!
-  data: OrganizationType
-}
-
-type OrganizationResults {
-  code: Int!
-  message: String!
-  data: [OrganizationType!]
-  page: Page
-}
-
-type CourseResult {
-  code: Int!
-  message: String!
-  data: CourseType
-}
-
-type CourseResults {
-  code: Int!
-  message: String!
-  data: [CourseType!]
   page: Page
 }
 
@@ -397,6 +364,45 @@ type StudentResults {
   code: Int!
   message: String!
   data: [StudentType!]
+  page: Page
+}
+
+type ScheduleResult {
+  code: Int!
+  message: String!
+  data: ScheduleType
+}
+
+type ScheduleResults {
+  code: Int!
+  message: String!
+  data: [ScheduleType!]
+  page: Page
+}
+
+type OrganizationResult {
+  code: Int!
+  message: String!
+  data: OrganizationType
+}
+
+type OrganizationResults {
+  code: Int!
+  message: String!
+  data: [OrganizationType!]
+  page: Page
+}
+
+type CourseResult {
+  code: Int!
+  message: String!
+  data: CourseType
+}
+
+type CourseResults {
+  code: Int!
+  message: String!
+  data: [CourseType!]
   page: Page
 }
 
@@ -725,8 +731,6 @@ type Query {
 
   """获取当前学员在某个课程上可以用的消费卡"""
   getUseCardRecordsByCourse(courseId: String!): CardRecordResults!
-  getScheduleRecordInfo(id: String!): ScheduleRecordResult!
-  getScheduleRecords(page: PageInput!): ScheduleRecordResults!
   getScheduleInfo(id: String!): ScheduleResult!
   getSchedules(today: String!): ScheduleResults!
 
@@ -735,6 +739,10 @@ type Query {
 
   """获取某一个课程的近七天的课程表"""
   getSchedulesByCourse(courseId: String!): ScheduleResults!
+  getScheduleRecordInfo(id: String!): ScheduleRecordResult!
+
+  """获取某个的课程表"""
+  getScheduleRecords(page: PageInput!): ScheduleRecordResults!
 }
 
 input PageInput {
@@ -787,8 +795,6 @@ type Mutation {
   deleteOrder(id: String!): Result!
   deleteWxorder(id: String!): Result!
   deleteCardRecord(id: String!): Result!
-  commitScheduleRecordInfo(params: ScheduleRecordInput!, id: String): ScheduleRecordResult!
-  deleteScheduleRecord(id: String!): Result!
 
   """开始排课"""
   autoCreateSchedule(startDay: String!, endDay: String!): Result!
@@ -797,6 +803,11 @@ type Mutation {
 
   """确认预约课程"""
   subscribeCourse(scheduleId: String!, cardId: String!): Result!
+  commitScheduleRecordInfo(params: ScheduleRecordInput!, id: String): ScheduleRecordResult!
+  deleteScheduleRecord(id: String!): Result!
+
+  """获取某人的课程表"""
+  cancelSubscribeCourse(scheduleRecordId: String!): Result!
 }
 
 input UserInput {
@@ -1003,7 +1014,7 @@ input TeacherInput {
   carryPrize: String
 }
 
-input ScheduleRecordInput {
+input ScheduleInput {
   """昵称"""
   name: String!
 
@@ -1014,7 +1025,7 @@ input ScheduleRecordInput {
   avatar: String!
 }
 
-input ScheduleInput {
+input ScheduleRecordInput {
   """昵称"""
   name: String!
 

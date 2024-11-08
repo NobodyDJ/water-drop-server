@@ -20,6 +20,12 @@ export class ScheduleRecordType {
   })
   subscribeTime: Date;
 
+  @Field({
+    description: '状态',
+    nullable: true,
+  })
+  status: string;
+
   @Field(() => StudentType, { nullable: true, description: '学员' })
   student: StudentType;
 

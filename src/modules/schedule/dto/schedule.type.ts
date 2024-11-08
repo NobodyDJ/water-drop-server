@@ -1,6 +1,7 @@
 import { CommonType } from '@/common/dto/common.type';
 import { CourseType } from '@/modules/course/dto/course.type';
 import { OrganizationType } from '@/modules/organization/dto/organization.type';
+import { TeacherType } from '@/modules/teacher/dto/teacher.type';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 /**
@@ -42,4 +43,7 @@ export class ScheduleType extends CommonType {
 
   @Field(() => OrganizationType, { nullable: true, description: '机构信息' })
   org: OrganizationType;
+
+  @Field(() => TeacherType, { nullable: true, description: '老师' })
+  teacher?: TeacherType;
 }

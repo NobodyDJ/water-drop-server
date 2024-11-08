@@ -4,9 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ScheduleRecord } from './models/schedule-record.entity';
 import { ScheduleRecordService } from './schedule-record.service';
+import { CardRecordModule } from '../cardRecord/card-record.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ScheduleRecord])],
+  imports: [TypeOrmModule.forFeature([ScheduleRecord]), CardRecordModule],
   providers: [ScheduleRecordService, ScheduleRecordResolver],
   exports: [ScheduleRecordService],
 })

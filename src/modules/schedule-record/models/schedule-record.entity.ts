@@ -9,7 +9,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 /**
  * 课程表记录
  */
-@Entity('scheduleRecord')
+@Entity('schedule_record')
 export class ScheduleRecord extends CommonEntity {
   @Column({
     comment: '预约时间',
@@ -17,6 +17,12 @@ export class ScheduleRecord extends CommonEntity {
     nullable: true,
   })
   subscribeTime: Date;
+
+  @Column({
+    comment: '状态',
+    nullable: true,
+  })
+  status: string;
 
   @ManyToOne(() => Student, { cascade: true })
   student: Student;

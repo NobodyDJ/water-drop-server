@@ -37,3 +37,5 @@ export const CARD_DEPLETE = 10035;
 export const SCHEDULE_NOT_EXIST = 10036;
 export const SUBSCRIBE_FAIL = 10037;
 export const SCHEDULE_HAD_SUBSCRIBE = 10038;
+export const SCHEDULE_RECORD_NOT_EXIST = 10039;
+export const CANCEL_SCHEDULE_FAIL = 10040;

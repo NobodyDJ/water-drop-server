@@ -18,7 +18,7 @@ import { CardRecordType } from './dto/card-record.type';
 import { CardRecordService } from './card-record.service';
 import { CurUserId } from '@/common/decorators/current-user.decorator';
 import { PageInput } from '@/common/dto/page.input';
-import { CARD_STATUS, CardType } from '@/common/constants/enmu';
+import { CardStatus, CardType } from '@/common/constants/enmu';
 import dayjs from 'dayjs';
 
 @Resolver(() => CardRecordType)
@@ -59,15 +59,15 @@ export class CardRecordResolver {
       where,
     });
     const newRes = results.map((c) => {
-      let status = CARD_STATUS.VALID;
+      let status = CardStatus.VALID;
       // 过期了
       if (dayjs().isAfter(c.endTime)) {
-        status = CARD_STATUS.EXPIRED;
+        status = CardStatus.EXPIRED;
       }
 
       // 耗尽了
       if (c.card.type === CardType.TIME && c.residueTime === 0) {
-        status = CARD_STATUS.DEPLETE;
+        status = CardStatus.DEPLETE;
       }
       return {
         ...c,

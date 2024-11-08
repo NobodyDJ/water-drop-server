@@ -63,6 +63,7 @@ export class CourseService {
       order: {
         createdAt: 'DESC',
       },
+      relations: ['org', 'teachers'],
     });
   }
 
