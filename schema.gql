@@ -234,6 +234,9 @@ type ScheduleType {
 
   """老师"""
   teacher: TeacherType
+
+  """预约记录"""
+  scheduleRecords: [ScheduleRecordType!]
 }
 
 type ScheduleRecordType {

@@ -100,6 +100,9 @@ export class ProductResolver {
         newProduct.cards = params.cards.map((childId) => ({
           id: childId,
         }));
+      } else {
+        // 防止消费卡被清空
+        newProduct.cards = product.cards;
       }
       const res = await this.productService.updateById(product.id, newProduct);
       if (res) {
