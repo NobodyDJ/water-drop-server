@@ -29,3 +29,9 @@ export const getRandomCode = () => {
   }
   return code.join('');
 };
+
+export const getEnvConfig = () => {
+  return process.env.NODE_ENV === 'development'
+    ? '.env'
+    : '/etc/server.conf/.env';
+};

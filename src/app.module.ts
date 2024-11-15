@@ -24,6 +24,7 @@ import { WxpayModule } from './modules/wxpay/wxpay.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
+      driver: require('mysql2'), // 此代码是临时添加，依旧无效
       host: process.env.MYSQL_HOST,
       port: parseInt(process.env.MYSQL_PORT),
       username: process.env.MYSQL_USERNAME,
@@ -31,7 +32,7 @@ import { WxpayModule } from './modules/wxpay/wxpay.module';
       database: process.env.MYSQL_DATABASE,
       entities: [`${__dirname}/../modules/**/*.entity{.ts,.js}`],
       logging: true,
-      synchronize: true,
+      synchronize: process.env.NODE_ENV === 'development' ? true : false,
       autoLoadEntities: true,
     }),
     // 注册graphql
