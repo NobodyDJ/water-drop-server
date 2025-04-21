@@ -72,7 +72,6 @@ export class AuthService {
     } catch (error) {
       // 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
       // 错误 message
-      console.log(error.message);
       return {
         code: CODE_SEND_ERROR,
         message: '发送验证码失败，请稍后再试',

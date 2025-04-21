@@ -216,7 +216,6 @@ export class ScheduleRecordResolver {
     }
 
     const { schedule } = scheduleRecord;
-    console.log('schedule', schedule);
     const startTime = dayjs(
       `${dayjs(schedule.schoolDay).format('YYYYMMDD')} ${schedule.startTime}`,
       'YYYYMMDD HH:mm:ss',

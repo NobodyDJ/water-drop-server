@@ -55,7 +55,6 @@ export class OrganizationResolver {
   ): Promise<OrganizationResult> {
     if (id) {
       const organization = await this.organizationService.findById(id);
-      console.log('organization', organization);
       if (!organization) {
         return {
           code: ORG_NOT_EXIST,
@@ -106,11 +105,9 @@ export class OrganizationResolver {
   ): Promise<OrganizationResults> {
     const { pageNum, pageSize } = page;
     const where: FindOptionsWhere<Organization> = { createdBy: userId };
-    console.log('name', name);
     if (name) {
       where.name = Like(`%${name}%`);
     }
-    console.log('where', where);
     const [results, total] = await this.organizationService.findOrganizations({
       start: (pageNum - 1) * pageSize,
       length: pageSize,

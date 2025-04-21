@@ -106,7 +106,6 @@ export class WxpayResolver {
     const student = await this.studentService.findById(userId);
     const product = await this.productService.findById(productId);
     const outTradeNo = uuidv4().replace(/-/g, '');
-    console.log('product', product);
     await this.orderService.create({
       tel: student.tel,
       outTradeNo,

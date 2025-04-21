@@ -109,11 +109,9 @@ export class CourseResolver {
         id: orgId,
       },
     };
-    console.log('name', name);
     if (name) {
       where.name = Like(`%${name}%`);
     }
-    console.log('where', where);
     const [results, total] = await this.courseService.findCourses({
       start: (pageNum - 1) * pageSize,
       length: pageSize,

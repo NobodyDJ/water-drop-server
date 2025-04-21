@@ -110,7 +110,6 @@ export class CardResolver {
     const [results] = await this.cardService.findCards({
       where,
     });
-    console.log('results', results);
     return {
       code: SUCCESS,
       message: '获取成功',
