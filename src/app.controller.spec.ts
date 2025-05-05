@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env.test' });
 
 describe('AppController', () => {
   let appController: AppController;
@@ -11,8 +13,13 @@ describe('AppController', () => {
     const app: TestingModule = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot({
-          type: 'sqlite',
-          database: ':memory:',
+          type: 'mysql',
+          host: process.env.MYSQL_HOST,
+          port: parseInt(process.env.MYSQL_PORT),
+          username: process.env.MYSQL_USERNAME,
+          password: process.env.MYSQL_PASSWORD,
+          database: process.env.MYSQL_DATABASE,
+          logging: true,
           synchronize: true,
           autoLoadEntities: true,
         }),

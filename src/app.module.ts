@@ -19,12 +19,13 @@ import { OrganizationModule } from './modules/organization/organization.module';
 import { CourseModule } from './modules/course/course.module';
 import { CardModule } from './modules/card/card.module';
 import { WxpayModule } from './modules/wxpay/wxpay.module';
+import { config } from 'dotenv';
+config();
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      driver: require('mysql2'), // 此代码是临时添加，依旧无效
       host: process.env.MYSQL_HOST,
       port: parseInt(process.env.MYSQL_PORT),
       username: process.env.MYSQL_USERNAME,
